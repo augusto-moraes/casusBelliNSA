@@ -1,5 +1,4 @@
 public class Mine extends Batiment {
-    private String type;
     
     public Batiment(int cout, Joueur appartient, int income){
 

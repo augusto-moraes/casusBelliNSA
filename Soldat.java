@@ -12,7 +12,7 @@ public class Soldat extends Unite{
   public boolean move(){
 
 
-
+    return false;
 
   }
 

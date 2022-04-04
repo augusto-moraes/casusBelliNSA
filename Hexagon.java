@@ -83,15 +83,16 @@ public class Hexagon extends Polygon {
         Color tmpC = g.getColor();
 
         g.setColor(new Color(colorValue));
+        g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 
-
-        if (filled)
+        if (filled) {
             g.fillPolygon(xpoints, ypoints, npoints);
-        else
+		} else {
             g.drawPolygon(xpoints, ypoints, npoints);
+		}
 
         // Set values to previous when done.
         g.setColor(tmpC);
-
+        g.setStroke(tmpS);
     }
 }

@@ -20,7 +20,7 @@ public class Graph {
 
     public void generateSommets() {
         for(int i=0; i<nbSommets; i++) {
-            sommets[i] = new Case();
+            sommets[i] = new Case(0,0);
         }
     }
 

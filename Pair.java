@@ -1,14 +1,14 @@
 import java.util.*;
 
 public class Pair {
-    public Case c1, c2;
+    public Case case1, case2;
 
-    public Pair(Case c1, Case c2) {
-        this.c1 = c1.id <= c2.id ? c1 : c2;
-        this.c2 = c1.id <= c2.id ? c2 : c1;
+    public Pair(Case case1, Case case2) {
+        this.case1 = case1.id <= case2.id ? case1 : case2;
+        this.case2 = case1.id <= case2.id ? case2 : case1;
     }
 
     public String toString(){
-        return "["+c1+", "+c2+"]";
+        return "["+case1+", "+case2+"]";
     }
 }

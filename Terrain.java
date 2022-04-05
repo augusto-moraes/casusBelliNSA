@@ -33,11 +33,7 @@ public class Terrain extends JPanel implements MouseListener{
 				
 			}
 		}
-
-
-				
-		
-		}
+	}
 		
 		
     public void mousePressed(MouseEvent e) {

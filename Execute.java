@@ -15,8 +15,8 @@ public class Execute{
         			
 
         f.add(p);
-        JButton t = new JButton("caca");
-        JButton c = new JButton("caca");
+        JButton t = new JButton("CasusBellINSA");
+        JButton c = new JButton("CasusBellINSA");
 
         f.add(t, BorderLayout.PAGE_START);
 		f.add(c, BorderLayout.PAGE_END);

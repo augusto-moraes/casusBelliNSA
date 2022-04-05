@@ -2,14 +2,14 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Execute{
+public class Execute {
 
 	public static void main(String[] args) {
 		Terrain  p = 	new Terrain(1500,700) ;
 
-		 JFrame f = new JFrame();
+		JFrame f = new JFrame();
 		f.setResizable (false);
-		 f.setLayout(new BorderLayout());
+		f.setLayout(new BorderLayout());
 
         p.setPreferredSize(new Dimension(1500, 700));
         			
@@ -26,7 +26,7 @@ public class Execute{
         f.pack();
         f.setLocationRelativeTo(null);
         f.setVisible(true);
-        f.addMouseListener(p);
+        p.addMouseListener(p);
 
 	}
 }

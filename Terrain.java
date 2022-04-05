@@ -37,11 +37,11 @@ public class Terrain extends JPanel implements MouseListener{
 		
 		
     public void mousePressed(MouseEvent e) {
-		 Graphics2D g = (Graphics2D)this.getGraphics();
-    int x=e.getX()-10; //
-    int y=e.getY()-65;
-    g.drawOval(x-5,y-5,10,10);
-	//Changer la couleur pres de x,y 
+		Graphics2D g = (Graphics2D)this.getGraphics();
+    	int x=e.getX(); 
+		int y=e.getY();
+		g.drawOval(x-5,y-5,10,10);
+		//Changer la couleur pres de x,y 
 	}
 
 //	public void mousePressed(MouseEvent e){};
@@ -61,8 +61,8 @@ public class Terrain extends JPanel implements MouseListener{
     //    drawHexGridLoop(g2d, origin, 7, 80, 2);
         
     }
-     private void drawHexGrid(Graphics2D g, int radius, int bord) {
-		 Graphics2D g2d = g;
+    private void drawHexGrid(Graphics2D g, int radius, int bord) {
+		Graphics2D g2d = g;
 		
 		int tabx = 0;
 		int taby = 0; 
@@ -74,7 +74,7 @@ public class Terrain extends JPanel implements MouseListener{
 			int  correction = (int)(padding*1.7);
 			int element = (int)(1.5*radius) + 2*(int)Math.round(padding*Math.tan(Math.PI/6)) ;
 			taby = 0;
-			 for (int j = 2*radius; j < HEIGHT - radius ; j= j + element ) {
+			for (int j = 2*radius; j < HEIGHT - radius ; j= j + element ) {
 
 				 if ( (j-2*radius)%(2*element) == 0) {
 					 p = p + Rinscrit + padding;

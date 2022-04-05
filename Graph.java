@@ -29,7 +29,7 @@ public class Graph {
             j = (int)(Math.random() * nbSommets);
             if(i!=j) {
                 Pair aux = new Pair(sommets[i],sommets[j]);
-                //if(!adj.contains(aux)) 
+                // if(!adj.contains(aux))  // pas besoin car TreeSet
                 adj.add(aux);
             }
         }

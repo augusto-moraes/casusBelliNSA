@@ -1,9 +1,8 @@
 import java.util.*;
 
 public class Joueur{
-    
+    public static int nbJoueur= 0;
     private String nom;
-    private static int nbJoueur= 0;
 
     private String color;
     private boolean isAlive;

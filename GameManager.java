@@ -1,15 +1,21 @@
 public class GameManager {
-	
-    
-    while (){
-        //condition de victoire
-        for (String Joueur : couleur ){        
-         
-         
-         
-        
-            
+    Joueur[] joueurs;
+    FenetreJeu fenetre;
+
+    int playersAlive;
+
+    public GameManager() {
+
+    }  
+
+    public void start() {
+
+    }
+
+    public void gameLoop() {
+        while(playersAlive > 1) {
+            for(String Joueur)
         }
-    }   
+    }
 }
 

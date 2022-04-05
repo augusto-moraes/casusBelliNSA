@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class Execute {
 
 	public static void main(String[] args) {
-		Terrain  p = 	new Terrain(1500,700) ;
+		Terrain  p = new Terrain(1500,700,100,5) ;
 
 		JFrame f = new JFrame();
 		f.setResizable (false);
@@ -15,8 +15,8 @@ public class Execute {
         			
 
         f.add(p);
-        JButton t = new JButton("CasusBellINSA");
-        JButton c = new JButton("CasusBellINSA");
+        JButton t = new JButton("casusBellINSA");
+        JButton c = new JButton("casusBellINSA");
 
         f.add(t, BorderLayout.PAGE_START);
 		f.add(c, BorderLayout.PAGE_END);

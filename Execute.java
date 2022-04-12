@@ -2,31 +2,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Execute {
+public class Execute{
 
 	public static void main(String[] args) {
-		Terrain  p = new Terrain(1500,700,100,5) ;
-
-		JFrame f = new JFrame();
-		f.setResizable (false);
-		f.setLayout(new BorderLayout());
-
-        p.setPreferredSize(new Dimension(1500, 700));
-        			
-
-        f.add(p);
-        JButton t = new JButton("casusBellINSA");
-        JButton c = new JButton("casusBellINSA");
-
-        f.add(t, BorderLayout.PAGE_START);
-		f.add(c, BorderLayout.PAGE_END);
-
-
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        p.addMouseListener(p);
-
+		 new Affichage(new GameManager());
 	}
 }

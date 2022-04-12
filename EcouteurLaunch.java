@@ -12,12 +12,14 @@ public class EcouteurLaunch implements ActionListener {
     
     public void actionPerformed(ActionEvent ae){
 		
-        fen.getContentPane().removeAll(); // fermeture de la fenetre d'accueil
-        FenetreJeu jeu = new FenetreJeu(nbJoueurs); //creation de la nouvelle fenetre de jeu
-        fen.setContentPane(jeu);
+        fen.clearScreen(); 
+        fen.startGame(nbJoueurs);
+
+        //FenetreJeu jeu = new FenetreJeu(nbJoueurs); //creation de la nouvelle fenetre de jeu
+        //fen.setContentPane(jeu);
    
-        fen.repaint();
-        fen.validate();
+        //fen.repaint();
+        //fen.validate();
         
         //seters de GameManager pour instancier les parametres du jeu
         //game.setJeu(jeu);

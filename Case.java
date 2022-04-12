@@ -14,7 +14,7 @@ public class Case implements Comparable<Case> {
     private int potentiel;
     public int bcolor;
     public Unite etat;
-  //  private Joueur appartient;
+    private Joueur appartient;
     public int id;
     public int color;
     public boolean fill;
@@ -41,16 +41,16 @@ public class Case implements Comparable<Case> {
 		fill = false;
 	}
 
-    public isCaseEmpty() {
+    public boolean isCaseEmpty() {
         return this.color == 0;
     }
 	
 	public void setColor(int color) {
 		this.color = color;
 		fill = true;
-		} 
+	} 
     
-        public boolean equals(Object obj){
+    public boolean equals(Object obj){
         Case other = (Case)obj;
         return other.id == this.id;
     }

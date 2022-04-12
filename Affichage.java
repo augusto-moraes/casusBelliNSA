@@ -10,11 +10,8 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 public class Affichage extends JFrame{
-    
-    private GameManager game;
-    
     private JPanel principal;
-    private JPanel joueur;
+    private JPanel choseNbPlayers;
 
     private JTextArea credits;
     private JButton PressStart;
@@ -24,11 +21,13 @@ public class Affichage extends JFrame{
     private JButton deuxjoueur;
     private JButton troisjoueur;
     private JButton quatrejoueur;
+
+    private GameManager gManager;
   
-    public Affichage(GameManager g){
+    public Affichage(GameManager gm){
         super("Casus Bellinsa");
-        
-        game = g;
+
+        this.gManager = gm;
         
         setSize(1600,900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,8 +35,8 @@ public class Affichage extends JFrame{
         principal = new JPanel(new BorderLayout());
         principal.setBackground(Color.BLACK);
         
-        joueur = new JPanel();
-        joueur.setBackground(Color.BLACK);
+        choseNbPlayers = new JPanel();
+        choseNbPlayers.setBackground(Color.BLACK);
         
 
         credits = new JTextArea();
@@ -59,29 +58,29 @@ public class Affichage extends JFrame{
                
         principal.add(PressStart);
         
-        joueur.add(unjoueur);
-        joueur.add(deuxjoueur);
-        joueur.add(troisjoueur);
-        joueur.add(quatrejoueur);
+        choseNbPlayers.add(unjoueur);
+        choseNbPlayers.add(deuxjoueur);
+        choseNbPlayers.add(troisjoueur);
+        choseNbPlayers.add(quatrejoueur);
         
-        PlayMusicEnBoucle("music_1.wav", 0.70);
+        // PlayMusicEnBoucle("music_1.wav", 0.70);
                 
         this.add(principal);
-        this.add(joueur, BorderLayout.NORTH); 
+        this.add(choseNbPlayers, BorderLayout.NORTH); 
         this.add(credits, BorderLayout.SOUTH);
         setVisible(true);
     }
     
     // méthode pour rendre d'image cliquable
     public JButton mkButton(String url){
-                JButton b = new JButton(new ImageIcon(url));
-                b.setOpaque(false);
-                b.setContentAreaFilled(false);
-                b.setBorderPainted(false);
-                return b;
-        }
+        JButton b = new JButton(new ImageIcon(url));
+        b.setOpaque(false);
+        b.setContentAreaFilled(false);
+        b.setBorderPainted(false);
+        return b;
+    }
         
-        public void PlayMusicEnBoucle(String chemin, double gain) {    // Lance la musique en boucle
+    public void PlayMusicEnBoucle(String chemin, double gain) {    // Lance la musique en boucle
 
         File audio = new File(chemin);
         AudioInputStream audioInputStream = null;
@@ -100,11 +99,12 @@ public class Affichage extends JFrame{
             return;
         }
     }
-    /*  public static void main(String[] args){
-		
-        new Affichage(new GameManager());
-    } */
     
+    public void clearScreen() {
+        this.getContentPane().removeAll();
+    }
 
+    public void startGame(int nbJoueurs) {
+        this.gManager.startGame(nbJoueurs);
+    }
 }
-

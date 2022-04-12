@@ -5,8 +5,8 @@ public class EcouteurUnites implements ActionListener {
 	Terrain fen;
 	Unite u;
     
-  public EcouteurUnites(Terrain t, Unite u){
-    this.fen = t;
+  public EcouteurUnites(Terrain fen, Unite u){
+    this.fen = fen;
     this.u = u;
   }
     

@@ -26,10 +26,16 @@ public class FenetreJeu extends JPanel{
     private JButton ferme;
     private JButton chateau;
     
+    private GameManager gManager;
+    private Terrain p;
+
+    private Joueur nextJoueur;
     
-    public FenetreJeu(int nbJoueurs) {
+    public FenetreJeu(GameManager gm) {
+        this.gManager = gm;
+        this.p = gManager.getTerrain();
+
 		setLayout(new BorderLayout());
-        //super("Casus Bellinsa");
         
         finDeTour = mkButton("images/finDuTour.png");
         annulerAction = mkButton("images/retourArriere.png");
@@ -65,27 +71,27 @@ public class FenetreJeu extends JPanel{
 		
 		add(panneauHaut,BorderLayout.NORTH);
         
-        
         JPanel panneauMilieu = new JPanel();
         
         panneauMilieu.setBackground(Color.BLACK);		
-        Terrain  p = new Terrain(1500,700,29,0) ;
+
+        // Set terrain stuff (sur game manager?)
 		p.setPreferredSize(new Dimension(1500, 700));
         p.addMouseListener(p);
-        
-		init i = new init(p,nbJoueurs);
-		i.initial();
+        // à mettre sur game manager si possible et enlever game manager des parametres de fenetre jeu?
+		gManager.generateTerrain();
+
         panneauMilieu.add(p);
         //Essaie pour les ecouteurs,a eliminer ou ailleurs car le joueur depende de game manager 
-        uniteNiveau1.addActionListener(new EcouteurUnites(p, new Paysan(1,new Joueur(0),1,1,1))); 
-		uniteNiveau2.addActionListener(new EcouteurUnites(p, new Lancier(1,new Joueur(0),1,1,1))); 
-		uniteNiveau3.addActionListener(new EcouteurUnites(p, new Chevalier(1,new Joueur(0),1,1,1))); 
-		uniteNiveau4.addActionListener(new EcouteurUnites(p, new Paladin(1,new Joueur(0),1,1,1)));  
+        uniteNiveau1.addActionListener(new EcouteurUnites(p, new Paysan(1,this.nextJoueur,1,1,1))); 
+		uniteNiveau2.addActionListener(new EcouteurUnites(p, new Lancier(1,this.nextJoueur,1,1,1))); 
+		uniteNiveau3.addActionListener(new EcouteurUnites(p, new Chevalier(1,this.nextJoueur,1,1,1))); 
+		uniteNiveau4.addActionListener(new EcouteurUnites(p, new Paladin(1,this.nextJoueur,1,1,1)));  
 		
-		tour.addActionListener(new EcouteurUnites(p, new Tour(1,new Joueur(0)))); 
-        tourForte.addActionListener(new EcouteurUnites(p, new Tourlvl2(1,new Joueur(0)))); 
-        ferme.addActionListener(new EcouteurUnites(p, new Mine(1,new Joueur(0),15))); 
-       // chateau.addActionListener(new EcouteurUnites(p, new TownHall(1,new Joueur(0),15))); 
+		tour.addActionListener(new EcouteurUnites(p, new Tour(1,this.nextJoueur))); 
+        tourForte.addActionListener(new EcouteurUnites(p, new Tourlvl2(1,this.nextJoueur))); 
+        ferme.addActionListener(new EcouteurUnites(p, new Mine(1,this.nextJoueur,15))); 
+       // chateau.addActionListener(new EcouteurUnites(p, new TownHall(1,this.nextJoueur,15))); 
 
         
         add(panneauHaut,BorderLayout.NORTH);
@@ -107,5 +113,8 @@ public class FenetreJeu extends JPanel{
 		return b;
 	}
 
+    public void setNextJoueur(Joueur j) {
+        this.nextJoueur = j;
+    }
 }
 

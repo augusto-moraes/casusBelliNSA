@@ -1,6 +1,5 @@
-// setNextJoueur() en fenetreJeu et setter le joueur depuis GameManager
-
 import java.util.LinkedList;
+import java.util.Iterator;
 
 public class GameManager {
 
@@ -11,7 +10,10 @@ public class GameManager {
     private int playersAlive;
 
     private Affichage affichage;
-    private FenetreJeu fJeu;
+    private FenetreJeu fenetreJeu;
+
+    private Iterator<Joueur> playerIt;
+    private Joueur first;
 
     private Terrain ter;
 
@@ -20,7 +22,6 @@ public class GameManager {
 
         this.affichage = new Affichage(this);
         this.ter = new Terrain(1500,700,29,0);
-
     }
 
     public void setPlayersAlive(int n) {
@@ -33,6 +34,8 @@ public class GameManager {
             Joueur aux = new Joueur(colors[i%colors.length]);
             this.playersList.add(aux);
         }
+        this.playerIt = playersList.iterator();
+        this.first = playerIt.hasNext() ? playerIt.next() : null;
     }
 
     public void generateTerrain() {
@@ -50,21 +53,31 @@ public class GameManager {
 		}
     }
 
+    public Terrain getTerrain() {return this.ter;}
+
     public void startGame(int nbJoueurs) {
         this.generatePlayers(nbJoueurs);
-        this.fJeu = new FenetreJeu(nbJoueurs);
+        this.fenetreJeu = new FenetreJeu(this);
 
-        affichage.setContentPane(fJeu);
+        affichage.setContentPane(fenetreJeu);
         affichage.repaint();
         affichage.validate();
+
+        //this.gameLoop();
     }
 
-    public void gameLoop() {
-        while(this.playersAlive > 1) {
-            for(Joueur joueur : this.playersList) {
-                //wait for this player to play
-            }
-        }
+    public void nextPlayer() {
+        Joueur elem = this.playerIt.hasNext() ? this.playerIt.next() : this.first;
+        fenetreJeu.setNextJoueur(elem);
+        System.out.println(elem+" turns");
     }
+
+    // public void gameLoop() {
+    //     while(this.playersAlive > 1) {
+    //         for(Joueur joueur : this.playersList) {
+    //             fenetreJeu.setNextJoueur(joueur);
+    //         }
+    //     }
+    // }
 }
 

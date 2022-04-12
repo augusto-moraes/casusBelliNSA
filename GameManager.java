@@ -15,13 +15,17 @@ public class GameManager {
     private Iterator<Joueur> playerIt;
     private Joueur first;
 
+    private int nextPlayerColor;
+
     private Terrain ter;
 
 	public GameManager() {
         this.playersList = new LinkedList<Joueur>();
 
         this.affichage = new Affichage(this);
-        this.ter = new Terrain(1500,700,29,0);
+        this.ter = new Terrain(1500,700,29,0,this);
+
+        this.nextPlayerColor = 0;
     }
 
     public void setPlayersAlive(int n) {
@@ -35,7 +39,10 @@ public class GameManager {
             this.playersList.add(aux);
         }
         this.playerIt = playersList.iterator();
-        this.first = playerIt.hasNext() ? playerIt.next() : null;
+        if(playerIt.hasNext()) {
+            this.first = playerIt.next();
+            this.nextPlayerColor = this.first.getColor();
+        }
     }
 
     public void generateTerrain() {
@@ -66,10 +73,18 @@ public class GameManager {
         //this.gameLoop();
     }
 
+    public int getPlayerColor() {
+        return this.nextPlayerColor;
+    }
+
     public void nextPlayer() {
-        Joueur elem = this.playerIt.hasNext() ? this.playerIt.next() : this.first;
+        if(!this.playerIt.hasNext()) this.playerIt = this.playersList.iterator();
+        Joueur elem = this.playerIt.next();
         fenetreJeu.setNextJoueur(elem);
         System.out.println(elem+" turns");
+
+        // à changer si plus simple, j'etais pressé
+        this.nextPlayerColor = elem.getColor();
     }
 
     // public void gameLoop() {

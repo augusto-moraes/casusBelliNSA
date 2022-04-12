@@ -21,9 +21,11 @@ public class Terrain extends JPanel implements MouseListener{
     public Case lastSelec;
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330 };
 
-    
+	private GameManager gManager;
 
-    public Terrain(int Width, int Height, int radius,int padding) {
+    public Terrain(int Width, int Height, int radius,int padding, GameManager gm) {
+		this.gManager = gm;
+
 		try {
 			imgFond = ImageIO.read(new File("images/Landscape.jpg"));
 		} catch (Exception e) {
@@ -60,10 +62,11 @@ public class Terrain extends JPanel implements MouseListener{
 
 	//Detecte le click du mouse et ses coordonnees	
     public void mousePressed(MouseEvent e) {
-		 Graphics2D g = (Graphics2D)this.getGraphics();
-		int x=e.getX(); //
+		Graphics2D g = (Graphics2D)this.getGraphics();
+		int x=e.getX(); 
 		int y=e.getY();
 		changeUnit(x,y);
+		this.gManager.nextPlayer();
 	}
 
 	//Dessine la figure dans la case correspondante
@@ -101,7 +104,7 @@ public class Terrain extends JPanel implements MouseListener{
 						//Si la case est disponible, mets l'unite dans la case (nextUnite est update par les actionListener en FenetreJeu)
 						tab[i][j].etat = nextUnit;
 						//Mettre une couleur au hazard, Inutie pour le jeu 
-						int color = randomColor();
+						int color = gManager.getPlayerColor();
 						tab[i][j].setColor(color);
 						//Dessine l'hexagone
 						Hexagon hex = new Hexagon(tab[i][j].x, tab[i][j].y, radius);				

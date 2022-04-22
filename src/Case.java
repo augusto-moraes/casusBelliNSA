@@ -48,9 +48,9 @@ public class Case implements Comparable<Case> {
 	public void setColor(int color) {
 		this.color = color;
 		fill = true;
-		} 
+	} 
     
-        public boolean equals(Object obj){
+    public boolean equals(Object obj){
         Case other = (Case)obj;
         return other.id == this.id;
     }
@@ -60,6 +60,6 @@ public class Case implements Comparable<Case> {
     }
 
     public String toString() {
-        return "jiji " + this.color + " ";
+        return "case color " + this.color + " ";
     }
 }

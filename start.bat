@@ -1,3 +1,3 @@
 @echo off
-javac StartGame.java
-java StartGame
+javac src/*.java
+java src/Execute

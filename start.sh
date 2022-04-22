@@ -1,2 +1,3 @@
-javac StartGame.java
-java StartGame
+cd src
+javac *.java
+java Execute

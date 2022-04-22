@@ -22,12 +22,12 @@ public class Affichage extends JFrame{
     private JButton troisjoueur;
     private JButton quatrejoueur;
 
-    private GameManager gManager;
+    private GameManager manager;
   
     public Affichage(GameManager gm){
         super("Casus Bellinsa");
 
-        this.gManager = gm;
+        this.manager = gm;
         
         setSize(1600,900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,12 +43,11 @@ public class Affichage extends JFrame{
         credits.setEditable(false);
         credits.setText("CasusBellInsa is a game made by Rhino Entertainement, All rights reserved. Music from Clash Royale. Have fun !");
         
-		PressStart = mkButton("images/pressStart.jpg");
-		//unjoueur = new JButton("un joueur");
-		unjoueur = mkButton("images/1joueur.jpg");
-		deuxjoueur = mkButton("images/2joueur.jpg");
-		troisjoueur = mkButton("images/3joueur.jpg");
-		quatrejoueur =mkButton("images/4joueur.jpg");
+		PressStart = mkButton("Sprites/images/pressStart.jpg");
+		unjoueur = mkButton("Sprites/images/1joueur.jpg");
+		deuxjoueur = mkButton("Sprites/images/2joueur.jpg");
+		troisjoueur = mkButton("Sprites/images/3joueur.jpg");
+		quatrejoueur =mkButton("Sprites/images/4joueur.jpg");
         
         PressStart.addActionListener(new EcouteurLaunch(this, 2)); 
         unjoueur.addActionListener(new EcouteurLaunch(this, 1));
@@ -63,7 +62,7 @@ public class Affichage extends JFrame{
         choseNbPlayers.add(troisjoueur);
         choseNbPlayers.add(quatrejoueur);
         
-        // PlayMusicEnBoucle("music_1.wav", 0.70);
+        // PlayMusicEnBoucle("Sprites/music/music_1.wav", 0.70); 
                 
         this.add(principal);
         this.add(choseNbPlayers, BorderLayout.NORTH); 
@@ -81,7 +80,6 @@ public class Affichage extends JFrame{
     }
         
     public void PlayMusicEnBoucle(String chemin, double gain) {    // Lance la musique en boucle
-
         File audio = new File(chemin);
         AudioInputStream audioInputStream = null;
         try {
@@ -105,6 +103,6 @@ public class Affichage extends JFrame{
     }
 
     public void startGame(int nbJoueurs) {
-        this.gManager.startGame(nbJoueurs);
+        this.manager.startGame(nbJoueurs);
     }
 }

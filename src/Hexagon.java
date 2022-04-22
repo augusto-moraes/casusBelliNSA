@@ -77,7 +77,7 @@ public class Hexagon extends Polygon {
         }
     }
 
-    public void draw(Graphics2D g, int x, int y, int lineThickness, int colorValue, boolean filled) {
+    public void draw(Graphics2D g,int lineThickness, int colorValue, boolean filled) {
         // Store before changing.
         Stroke tmpS = g.getStroke();
         Color tmpC = g.getColor();

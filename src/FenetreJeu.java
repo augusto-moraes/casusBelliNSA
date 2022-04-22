@@ -21,35 +21,37 @@ public class FenetreJeu extends JPanel{
     private JButton uniteNiveau3;
     private JButton uniteNiveau4;
     
+    private JPanel panneauHaut;
+    
     private JButton tour;
     private JButton tourForte;
     private JButton ferme;
     private JButton chateau;
     
-    private GameManager gManager;
+    private GameManager manager;
     private Terrain p;
 
-    private Joueur nextJoueur;
+    public Joueur nextJoueur;
     
     public FenetreJeu(GameManager gm) {
-        this.gManager = gm;
-        this.p = gManager.getTerrain();
+        this.manager = gm;
+        this.p = manager.getTerrain();
 
 		setLayout(new BorderLayout());
         
-        finDeTour = mkButton("images/finDuTour.png");
-        annulerAction = mkButton("images/retourArriere.png");
-        parametres = mkButton("images/parametres.png");
+        finDeTour = mkButton("Sprites/images/finDuTour.png");
+        annulerAction = mkButton("Sprites/images/retourArriere.png");
+        parametres = mkButton("Sprites/images/parametres.png");
         
-        uniteNiveau1 = mkButton("images/unitelv1.png");
-        uniteNiveau2 = mkButton("images/unitelv2.png");
-        uniteNiveau3 = mkButton("images/unitelv3.png");
-        uniteNiveau4 = mkButton("images/unitelv4.png");
+        uniteNiveau1 = mkButton("Sprites/images/unitelv1.png");
+        uniteNiveau2 = mkButton("Sprites/images/unitelv2.png");
+        uniteNiveau3 = mkButton("Sprites/images/unitelv3.png");
+        uniteNiveau4 = mkButton("Sprites/images/unitelv4.png");
         
-        tour = mkButton("images/Tower.png");
-        tourForte = mkButton("images/Strong_tower.png");
-        ferme = mkButton("images/Farm.png");
-        chateau = mkButton("images/Castle.png");
+        tour = mkButton("Sprites/images/Tower.png");
+        tourForte = mkButton("Sprites/images/Strong_tower.png");
+        ferme = mkButton("Sprites/images/Farm.png");
+        chateau = mkButton("Sprites/images/Castle.png");
         
         JPanel panneauBas = new JPanel();
         panneauBas.setBackground(Color.BLACK);
@@ -64,10 +66,24 @@ public class FenetreJeu extends JPanel{
         panneauBas.add(uniteNiveau4);
         panneauBas.add(finDeTour);
         
-        JPanel panneauHaut = new JPanel();
+        this.panneauHaut = new JPanel();
         
-        panneauHaut.setBackground(Color.BLACK);		
+        panneauHaut.setBackground(Color.BLACK);	
 		panneauHaut.add(parametres);
+		
+		JLabel[] tabMoney = new JLabel[GameManager.playersList.size()];
+		for(int i = 0; i < tabMoney.length; i++) {
+			tabMoney[i] = new JLabel();
+			tabMoney[i].setText("Argent joueur "+(i+1)+": "+GameManager.getMoneyJoueurs()[i]);
+			panneauHaut.add(tabMoney[i]);
+		}
+		
+		JLabel[] tabRevenus = new JLabel[GameManager.playersList.size()];
+		for(int i = 0; i < tabRevenus.length; i++) {
+			tabRevenus[i] = new JLabel();
+			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+GameManager.getIncomeJoueurs()[i]);
+			panneauHaut.add(tabRevenus[i]);
+		}
 		
 		add(panneauHaut,BorderLayout.NORTH);
         
@@ -79,18 +95,19 @@ public class FenetreJeu extends JPanel{
 		p.setPreferredSize(new Dimension(1500, 700));
         p.addMouseListener(p);
         // à mettre sur game manager si possible et enlever game manager des parametres de fenetre jeu?
-		gManager.generateTerrain();
+		manager.generateTerrain();
 
         panneauMilieu.add(p);
         //Essaie pour les ecouteurs,a eliminer ou ailleurs car le joueur depende de game manager 
-        uniteNiveau1.addActionListener(new EcouteurUnites(p, new Paysan(1,this.nextJoueur,1,1,1))); 
-		uniteNiveau2.addActionListener(new EcouteurUnites(p, new Lancier(1,this.nextJoueur,1,1,1))); 
-		uniteNiveau3.addActionListener(new EcouteurUnites(p, new Chevalier(1,this.nextJoueur,1,1,1))); 
-		uniteNiveau4.addActionListener(new EcouteurUnites(p, new Paladin(1,this.nextJoueur,1,1,1)));  
+		finDeTour.addActionListener(new EcouteurVal(this));
+        uniteNiveau1.addActionListener(new EcouteurUnites(this,p,"Paysan")); 
+		uniteNiveau2.addActionListener(new EcouteurUnites(this,p,"Lancier")); 
+		uniteNiveau3.addActionListener(new EcouteurUnites(this,p,"Chevalier")); 
+		uniteNiveau4.addActionListener(new EcouteurUnites(this,p,"Paladin"));  
 		
-		tour.addActionListener(new EcouteurUnites(p, new Tour(1,this.nextJoueur))); 
-        tourForte.addActionListener(new EcouteurUnites(p, new Tourlvl2(1,this.nextJoueur))); 
-        ferme.addActionListener(new EcouteurUnites(p, new Mine(1,this.nextJoueur,15))); 
+		tour.addActionListener(new EcouteurUnites(this,p,"Tour")); 
+        tourForte.addActionListener(new EcouteurUnites(this,p,"Tourlvl2")); 
+        ferme.addActionListener(new EcouteurUnites(this,p,"Mine")); 
        // chateau.addActionListener(new EcouteurUnites(p, new TownHall(1,this.nextJoueur,15))); 
 
         
@@ -104,6 +121,12 @@ public class FenetreJeu extends JPanel{
        
         
     }
+    public void changeBackground() {
+		int c = nextJoueur.getColor();
+		Color colo = new Color(c);
+		this.panneauHaut.setBackground(colo);	
+	}
+		
     
     public JButton mkButton(String url){
 		JButton b = new JButton(new ImageIcon(url));
@@ -112,9 +135,19 @@ public class FenetreJeu extends JPanel{
 		b.setBorderPainted(false);
 		return b;
 	}
+	//Change la variable dans terrain du joueur et met un StandBy
+	public void changeNextUnitStandBy(Joueur j) {
+		this.p.setNextUnit(new Unite(0,j,0));
+	}
+	//Demande le prochain joueur 
+	public void NextPlayer() {
+		manager.nextPlayer();
+		
+	}
 
     public void setNextJoueur(Joueur j) {
         this.nextJoueur = j;
+        changeBackground();
     }
 }
 

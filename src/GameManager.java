@@ -3,26 +3,20 @@ import java.util.Iterator;
 
 public class GameManager {
 
+    public static LinkedList<Joueur> playersList;
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330, 0x581845, 0x16A085 };
-
-    private LinkedList<Joueur> playersList;
-
     private int playersAlive;
-
     private Affichage affichage;
     private FenetreJeu fenetreJeu;
-
     private Iterator<Joueur> playerIt;
-    private Joueur first;
-
     private int nextPlayerColor;
-
     private Terrain ter;
 
 	public GameManager() {
         this.playersList = new LinkedList<Joueur>();
 
         this.affichage = new Affichage(this);
+        
         this.ter = new Terrain(1500,700,29,0,this);
 
         this.nextPlayerColor = 0;
@@ -35,14 +29,10 @@ public class GameManager {
     public void generatePlayers(int nbJoueurs) {
         this.setPlayersAlive(nbJoueurs);
         for(int i=0;i<nbJoueurs;i++) {
-            Joueur aux = new Joueur(colors[i%colors.length]);
+            Joueur aux = new Joueur(colors[i]); //%colors.length
             this.playersList.add(aux);
         }
         this.playerIt = playersList.iterator();
-        if(playerIt.hasNext()) {
-            this.first = playerIt.next();
-            this.nextPlayerColor = this.first.getColor();
-        }
     }
 
     public void generateTerrain() {
@@ -56,43 +46,54 @@ public class GameManager {
 				
 			}
 			ter.tab[x][y].setColor(j.getColor());
-			ter.tab[x][y].etat = new TownHall(1,new Joueur(0),15);
+			ter.tab[x][y].unite = new TownHall(1,j,15);
+			ter.tab[x][y].appartient = j;
 		}
     }
 
-    public Terrain getTerrain() {return this.ter;}
+    public Terrain getTerrain() { return this.ter; }
 
     public void startGame(int nbJoueurs) {
         this.generatePlayers(nbJoueurs);
+        
         this.fenetreJeu = new FenetreJeu(this);
-
+		this.nextPlayer();
         affichage.setContentPane(fenetreJeu);
         affichage.repaint();
         affichage.validate();
-
-        //this.gameLoop();
     }
 
-    public int getPlayerColor() {
-        return this.nextPlayerColor;
-    }
+    public int getPlayerColor() { return this.nextPlayerColor; }
 
     public void nextPlayer() {
         if(!this.playerIt.hasNext()) this.playerIt = this.playersList.iterator();
         Joueur elem = this.playerIt.next();
         fenetreJeu.setNextJoueur(elem);
-        System.out.println(elem+" turns");
 
-        // à changer si plus simple, j'etais pressé
         this.nextPlayerColor = elem.getColor();
+        fenetreJeu.repaint();
+        fenetreJeu.validate();
     }
-
-    // public void gameLoop() {
-    //     while(this.playersAlive > 1) {
-    //         for(Joueur joueur : this.playersList) {
-    //             fenetreJeu.setNextJoueur(joueur);
-    //         }
-    //     }
-    // }
+    
+    public static int[] getIncomeJoueurs() {
+		int[] incomes = new int[playersList.size()];
+		int cpt = 0;
+		for(Joueur j : playersList) {
+			for(Unite u : j.lesUnites) {
+				incomes[cpt] = u.getIncome();
+			}
+			cpt++;
+		}
+		return incomes;
+	}
+	
+	public static int[] getMoneyJoueurs() {
+		int[] argent = new int[playersList.size()];
+		int cpt = 0;
+		for(Joueur j : playersList) {
+			argent[cpt] = j.getMoney();
+			cpt++;
+		}
+		return argent;
+	}
 }
-

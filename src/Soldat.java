@@ -21,8 +21,4 @@ public class Soldat extends Unite{
     public boolean getdeplacement() {
 		return deplacement;
 	}
-    
-
-
-
 }

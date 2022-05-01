@@ -5,7 +5,7 @@ public class TownHall extends Batiment {
   public Image img;
 
   public TownHall(int cout, Joueur appartient, int income){
-    super(cout, appartient, income, "TownHall");
+    super(cout, appartient,2, income, "TownHall");
 
     try {
       this.img = new ImageIcon(getClass().getResource("Sprites/images/Castle.png")).getImage();

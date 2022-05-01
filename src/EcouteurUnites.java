@@ -14,13 +14,13 @@ public class EcouteurUnites implements ActionListener {
   public void actionPerformed(ActionEvent ae){
 	  Unite u = null;
 	  if (type == "Paysan") {
-		  u = new Paysan(fj.nextJoueur,1);
+		  u = new Paysan(fj.nextJoueur);
 	  } else if (type == "Lancier") {
-		  u = new Lancier(3,fj.nextJoueur,-1,1,1);
+		  u = new Lancier(fj.nextJoueur);
 	  } else if (type == "Chevalier") {
-		  u = new Chevalier(6,fj.nextJoueur,-2,1,1);
+		  u = new Chevalier(fj.nextJoueur);
 	  }else if (type == "Paladin") {
-		  u = new Paladin(fj.nextJoueur,1);
+		  u = new Paladin(fj.nextJoueur);
 	  } else if (type == "Tour" ) {
 		  u = new Tour(2,fj.nextJoueur);
 	  }else if (type == "Tourlvl2" ) {
@@ -28,7 +28,7 @@ public class EcouteurUnites implements ActionListener {
 	  }else if (type == "Mine" ) {
 		  u = new Mine(7,fj.nextJoueur,15);
 	  }
-	  
+	  fen.transition = false;
 	  fen.setNextUnit(u);
   }
 }

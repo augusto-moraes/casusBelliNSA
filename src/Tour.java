@@ -8,7 +8,7 @@ public class Tour extends Batiment {
 	final public Image img = new ImageIcon(getClass().getResource("Sprites/images/Tower.png")).getImage();
     
   public Tour(int cout, Joueur appartient){
-    super(cout, appartient, 0, "Tour");
+    super(cout, appartient,3, 0, "Tour");
   }
 
   public Image getImage() {

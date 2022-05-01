@@ -22,11 +22,15 @@ public class FenetreJeu extends JPanel{
     private JButton uniteNiveau4;
     
     private JPanel panneauHaut;
+    public JPanel panneauMoneyIncome;
     
     private JButton tour;
     private JButton tourForte;
     private JButton ferme;
     private JButton chateau;
+    
+    private JLabel[] tabMoney;
+    private JLabel[] tabRevenus;
     
     private GameManager manager;
     private Terrain p;
@@ -67,23 +71,13 @@ public class FenetreJeu extends JPanel{
         panneauBas.add(finDeTour);
         
         this.panneauHaut = new JPanel();
+        this.panneauMoneyIncome = new JPanel();
         
         panneauHaut.setBackground(Color.BLACK);	
 		panneauHaut.add(parametres);
+		panneauHaut.add(panneauMoneyIncome);
 		
-		JLabel[] tabMoney = new JLabel[GameManager.playersList.size()];
-		for(int i = 0; i < tabMoney.length; i++) {
-			tabMoney[i] = new JLabel();
-			tabMoney[i].setText("Argent joueur "+(i+1)+": "+GameManager.getMoneyJoueurs()[i]);
-			panneauHaut.add(tabMoney[i]);
-		}
-		
-		JLabel[] tabRevenus = new JLabel[GameManager.playersList.size()];
-		for(int i = 0; i < tabRevenus.length; i++) {
-			tabRevenus[i] = new JLabel();
-			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+GameManager.getIncomeJoueurs()[i]);
-			panneauHaut.add(tabRevenus[i]);
-		}
+  
 		
 		add(panneauHaut,BorderLayout.NORTH);
         
@@ -108,16 +102,29 @@ public class FenetreJeu extends JPanel{
 		tour.addActionListener(new EcouteurUnites(this,p,"Tour")); 
         tourForte.addActionListener(new EcouteurUnites(this,p,"Tourlvl2")); 
         ferme.addActionListener(new EcouteurUnites(this,p,"Mine")); 
-       // chateau.addActionListener(new EcouteurUnites(p, new TownHall(1,this.nextJoueur,15))); 
+        
+        this.tabMoney = new JLabel[manager.playersList.size()];
+		for(int i = 0; i < tabMoney.length; i++) {
+			tabMoney[i] = new JLabel();
+			tabMoney[i].setText("Argent joueur "+(i+1)+": "+manager.getMoneyJoueurs()[i]);
+			panneauMoneyIncome.add(tabMoney[i]);
+		}
+		
+		this.tabRevenus = new JLabel[manager.playersList.size()];
+		for(int i = 0; i < tabRevenus.length; i++) {
+			tabRevenus[i] = new JLabel();
+			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+manager.getIncomeJoueurs()[i]);
+			panneauMoneyIncome.add(tabRevenus[i]);
+		}
+       
+       
 
         
         add(panneauHaut,BorderLayout.NORTH);
         add(panneauBas,BorderLayout.SOUTH);
         add(panneauMilieu,BorderLayout.CENTER);
         
-        //        this.setSize(1000,600);
-      //  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      //  this.setVisible(true);
+ 
        
         
     }
@@ -125,6 +132,7 @@ public class FenetreJeu extends JPanel{
 		int c = nextJoueur.getColor();
 		Color colo = new Color(c);
 		this.panneauHaut.setBackground(colo);	
+		this.panneauMoneyIncome.setBackground(colo);	
 	}
 		
     
@@ -137,17 +145,28 @@ public class FenetreJeu extends JPanel{
 	}
 	//Change la variable dans terrain du joueur et met un StandBy
 	public void changeNextUnitStandBy(Joueur j) {
-		this.p.setNextUnit(new Unite(0,j,0));
+		this.p.setNextUnit(new Unite(0,j,0,0));
 	}
 	//Demande le prochain joueur 
 	public void NextPlayer() {
 		manager.nextPlayer();
-		
 	}
 
     public void setNextJoueur(Joueur j) {
         this.nextJoueur = j;
         changeBackground();
     }
+    
+    public void afficheMoney() {
+		for(int i = 0; i < manager.playersList.size(); i++) {
+			tabMoney[i].setText("Argent joueur "+(i+1)+": "+manager.getMoneyJoueurs()[i]);
+		}
+	}
+	
+	public void afficheRevenus() {
+		for(int i = 0; i < manager.playersList.size(); i++) {
+			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+manager.getIncomeJoueurs()[i]);
+		}
+	}
 }
 

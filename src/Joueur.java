@@ -5,12 +5,13 @@ public class Joueur{
     private static int nbJoueur= 0;
     private String nom;
     private int id;
+
     private int color;
     private boolean isAlive;
     private boolean bot;
-    private int money;
-    private int nbCase;
-    public LinkedList<Unite> lesUnites = new LinkedList<Unite>();
+    private int money; //la monnaie du joueur
+    private int nbCase; //le nombre de cases que le joueur a sur le plateau
+    public LinkedList<Unite> lesUnites = new LinkedList<Unite>(); //le tableau des unités que possède le joueur sur le terrain
 
     // nom un peu useless, on pourrait peut-etre enlever si on l'utilise pas a la fin
     public Joueur(String nom, int color) {
@@ -20,17 +21,18 @@ public class Joueur{
         this.color=color;
         this.money= 15;
         this.nbCase=1;
+
     }
 
     public String toString() {
-		return "Joueur " + this.id + " avec " + getMoney() + " balles et un nb d'unites de " + lesUnites.size() + " et " + this.nbCase + " cases";
+		return "Joueur " + this.id + " avec " + getMoney() + " pièces et un nb d'unités de " + lesUnites.size() + " et " + this.nbCase + " cases";
 	}
     
     public Joueur(int color) {
         this("Joueur", color);
     }
 
-    public void addCase() {
+    public void addCase() { //ajoute une case au nombre de cases que le joueur a
 		this.nbCase++;
 	}
 
@@ -38,7 +40,7 @@ public class Joueur{
         this.nbCase-=nb;
     }
 
-    public void achatCout(Unite u) {
+    public void achatCout(Unite u) { //actualise la monnaie quand on achète une unité
 		this.money-=u.getCout();
 	}
     
@@ -66,8 +68,8 @@ public class Joueur{
         this.nbCase=nbcases;
     }
     
-    public int retIncome(){
-        int somme=0;
+    public int retIncome(){ //calcule le revenu des unites du Joueur
+        int somme=this.nbCase;
         for ( Unite a : lesUnites) {
             somme+= a.getIncome();
   
@@ -77,9 +79,9 @@ public class Joueur{
     
     public boolean initTour(){
         // récupérer son économie
-        this.money += this.nbCase;
-        while(this.money+this.retIncome()<=0) {
-            this.lesUnites.removeLast();
+        while(lesUnites.size() != 0 && this.money+this.retIncome()<=0) { //tant qu'on a la somme de la monnaie et des incomes qui est négative, on tue la dernière unite du tableau d'unites
+            this.lesUnites.removeLast().Case.unite = null;
+            
         }
         this.money += this.retIncome();
         

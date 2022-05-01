@@ -1,19 +1,21 @@
-import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Iterator;
 
 public class GameManager {
 
-    public static LinkedList<Joueur> playersList;
+    public static CopyOnWriteArrayList<Joueur> playersList; // must be CopyOnWriteArrayList to update iterator when removing (avoid CurrentModificationException)
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330, 0x581845, 0x16A085 };
     private int playersAlive;
-    private Affichage affichage;
-    private FenetreJeu fenetreJeu;
-    private Iterator<Joueur> playerIt;
+    public Affichage affichage;
+    public FenetreJeu fenetreJeu;
+    private Iterator<Joueur> playerIt; // Iterator est l'un des moyens de parcourir (traverse) les éléments d'une Collection.
     private int nextPlayerColor;
     private Terrain ter;
 
+    private Joueur currentPlayer;
+
 	public GameManager() {
-        this.playersList = new LinkedList<Joueur>();
+        this.playersList = new CopyOnWriteArrayList<Joueur>();
 
         this.affichage = new Affichage(this);
         
@@ -26,24 +28,23 @@ public class GameManager {
         this.playersAlive = n;
     }
 
-    public void generatePlayers(int nbJoueurs) {
+    public void generatePlayers(int nbJoueurs) { //génère le nombre de joueurs demandés en modifiant l'attribut playerAlive
         this.setPlayersAlive(nbJoueurs);
         for(int i=0;i<nbJoueurs;i++) {
-            Joueur aux = new Joueur(colors[i]); //%colors.length
+            Joueur aux = new Joueur(colors[i]); // %colors.length
             this.playersList.add(aux);
         }
         this.playerIt = playersList.iterator();
     }
 
-    public void generateTerrain() {
+    public void generateTerrain() { // génère le terrain avec un TownHall placé aléatoirement pour chaque joueur
         for (Joueur j : playersList) {
 			int x = (int)(Math.random()*(ter.col-1));
 			int y = (int)(Math.random()*(ter.row-1));
 			
 			while (ter.tab[x][y].color != 0) {
 				x = (int)(Math.random()*(ter.col-1));
-			    y = (int)(Math.random()*(ter.row-1));
-				
+			    y = (int)(Math.random()*(ter.row-1));	
 			}
 			ter.tab[x][y].setColor(j.getColor());
 			ter.tab[x][y].unite = new TownHall(1,j,15);
@@ -53,24 +54,36 @@ public class GameManager {
 
     public Terrain getTerrain() { return this.ter; }
 
-    public void startGame(int nbJoueurs) {
+    public void startGame(int nbJoueurs) { //méthode qui commence le jeu
         this.generatePlayers(nbJoueurs);
         
         this.fenetreJeu = new FenetreJeu(this);
 		this.nextPlayer();
-        affichage.setContentPane(fenetreJeu);
+        affichage.setContentPane(fenetreJeu); //affiche la fenetre de jeu, c'est EcouteurLaunch qui clear l'écran précédent
         affichage.repaint();
         affichage.validate();
     }
+
+    public void updateIterator() {
+        this.playerIt = this.playersList.iterator();
+        while(this.playerIt.hasNext() && this.playerIt.next() != this.currentPlayer) {}
+    }
+    
+    public void removePlayer(Joueur joueurMort) {
+		this.playersList.remove(joueurMort);
+        this.updateIterator();
+	}
 
     public int getPlayerColor() { return this.nextPlayerColor; }
 
     public void nextPlayer() {
         if(!this.playerIt.hasNext()) this.playerIt = this.playersList.iterator();
-        Joueur elem = this.playerIt.next();
-        fenetreJeu.setNextJoueur(elem);
-
-        this.nextPlayerColor = elem.getColor();
+        this.currentPlayer = this.playerIt.next();
+        fenetreJeu.setNextJoueur(this.currentPlayer);
+        fenetreJeu.nextJoueur.initTour();
+        fenetreJeu.afficheMoney();
+		fenetreJeu.afficheRevenus();
+        // this.nextPlayerColor = currentPlayer.getColor();
         fenetreJeu.repaint();
         fenetreJeu.validate();
     }
@@ -79,9 +92,7 @@ public class GameManager {
 		int[] incomes = new int[playersList.size()];
 		int cpt = 0;
 		for(Joueur j : playersList) {
-			for(Unite u : j.lesUnites) {
-				incomes[cpt] = u.getIncome();
-			}
+			incomes[cpt] = j.retIncome();
 			cpt++;
 		}
 		return incomes;

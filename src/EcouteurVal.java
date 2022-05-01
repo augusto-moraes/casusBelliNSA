@@ -13,6 +13,6 @@ public class EcouteurVal implements ActionListener {
 	//Met l'unite StandBy dans terrain NextUnit
 	fj.changeNextUnitStandBy(fj.nextJoueur);	
 	//Reinitialiser le tour au debut de chaque (Pour le moment deplacement des soldat mais aussi thune...)
-	fj.nextJoueur.initTour();
+
 	}
 }

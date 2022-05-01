@@ -7,7 +7,7 @@ public class Tourlvl2 extends Batiment {
   final public Image img = new ImageIcon(getClass().getResource("Sprites/images/Strong_tower.png")).getImage();
 	
   public Tourlvl2(int cout, Joueur appartient){		
-		super(cout, appartient, 0, "Tour");
+		super(cout, appartient,4, 0, "Tour");
   }
   
   public Image getImage() {

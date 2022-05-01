@@ -8,7 +8,7 @@ public class Mine extends Batiment {
 	final public Image img = new ImageIcon(getClass().getResource("Sprites/images/Farm.png")).getImage();
     
     public Mine(int cout, Joueur appartient, int income) {
-		super(cout, appartient, income, "Mine");
+		super(cout, appartient,1, income, "Mine");
     
 
   }

@@ -14,6 +14,7 @@ public class EcouteurLaunch implements ActionListener {
 		
         fen.clearScreen(); 
         fen.startGame(nbJoueurs);
+       
 
         //FenetreJeu jeu = new FenetreJeu(nbJoueurs); //creation de la nouvelle fenetre de jeu
         //fen.setContentPane(jeu);

@@ -8,21 +8,21 @@ public class Terrain extends JPanel implements MouseListener{
 
     public final int WIDTH ; //largeur
     public final int HEIGHT; //hauteur
-    public Case[][] tab; 
-    public int Rinscrit;
+    public Case[][] tab;   //Tableau avec les unites 
+    public int Rinscrit;	//rayon cercle inscrit de l'hexagone
     public Unite nextUnit; //unité qu'on a sélectionné dans la barre d'unités
 
-    public int radius; //Rayon
+    public int radius; //Rayon de l'hexagone externe
     public int col; //colonne
     public int row; //ligne
-    public int fill;
-    public Image imgFond;
+
+    public Image imgFond; //Image de fond
     public int padding; //remplissage
     public Graphics2D g;
-    public Case lastSelec;
+    public Case lastSelec; //Accesoire pour selectioner 
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330 };
     private GameManager manager;
-    public boolean transition;
+    public boolean transition; //Pour voir si c'est un deplacement d'une case
 
     
 
@@ -35,8 +35,9 @@ public class Terrain extends JPanel implements MouseListener{
 		this.HEIGHT = Height;
 		this.radius = radius;
 		this.padding = padding;
-		Rinscrit = (int)Math.round(radius*Math.cos(Math.PI/6));
 		
+		Rinscrit = (int)Math.round(radius*Math.cos(Math.PI/6));
+		//Dimension pour que tout rentre dans la fenetre correctement
 		col = 1 + (int)( WIDTH - 4*radius) /(2*Rinscrit + 2*padding);
 		row = 1 + (int)((HEIGHT -3*radius)/(1.5*radius+ 2*Math.round(padding*Math.tan(Math.PI/6))));
 		tab = new Case[col][row];
@@ -47,7 +48,7 @@ public class Terrain extends JPanel implements MouseListener{
 			}
 		}	
 	}
-	
+	//Effacer un unite u du tableau (elimine l'image en remplissant l'hexagone (la couleur est dans la case qui aurait etait changer avant d'execute cette methode))
 	public void effacer(Unite u) {
 		for (int i = 0; i < tab.length; i++) {
 			for (int j = 0; j < tab[0].length; j++) { 
@@ -69,8 +70,10 @@ public class Terrain extends JPanel implements MouseListener{
 				possible = true;
 				//D'autre part si c'est un soldat et une Case Voisine est de la même couleur que la prochaine unite 
 				//On mesure les differences de puissance 
+				//Je suis presque sure que checkvoisin et checkvoisintour pourraient aller ensemble
 			} else if (nextUnit instanceof Soldat &&  checkVoisin(x,y)) {
 				if ( checkVoisinTour(x,y,nextUnit)){
+                    
                     if (tab[x][y].unite != null && tab[x][y].appartient != nextUnit.appartient && nextUnit.getNiveau()>=tab[x][y].unite.getNiveau()) { /*
                         si la case contient une unité qui n'est pas de la couleur du joueur dont c'est le tour
                         * on supprime l'unité déjà présente sur la case (donc l'unité du joueur attaqué)
@@ -91,6 +94,7 @@ public class Terrain extends JPanel implements MouseListener{
                         }
                         else {
                             tab[x][y].appartient.lesUnites.remove(tab[x][y].unite);
+                            tab[x][y].appartient.enleveCases(1);
                         }
                         nextUnit.appartient.addCase(); 
                         possible = true;
@@ -124,18 +128,19 @@ public class Terrain extends JPanel implements MouseListener{
     //Permet de regarder si la case attaquée possède un voisin qui est une tour de trop haut niveau, si oui alors return false. Sinon, l'attaque est possible, return True
     public boolean checkVoisinTour(int x, int y, Unite unite) {
 		int [] directions = {-1,0,1};
+		boolean res  = true;
 
 		for(int i : directions) {
 			for(int j : directions) {
 				if(!((y%2 != 0 && i == 1 && j!=0) || (y%2 == 0 && i == -1 && j!=0))) {
 					if(x+i>=0 && x+i<tab.length && y+j>=0 && y+j<tab[0].length && tab[x+i][y+j].appartient != null 
-					&& (tab[x+i][y+j].unite instanceof Tour || tab[x+i][y+j].unite instanceof Tourlvl2 || tab[x+i][y+j].unite instanceof Paladin ) && tab[x+i][y+j].unite.getNiveau()> unite.getNiveau() )
-						return false;
+					&& (tab[x+i][y+j].unite instanceof Tour || tab[x+i][y+j].unite instanceof Tourlvl2 || tab[x+i][y+j].unite instanceof Paladin ) && tab[x+i][y+j].unite.getNiveau()> unite.getNiveau() && tab[x+i][y+j].appartient != nextUnit.appartient)
+						res = false;
 				}
 			}
 		}
 
-		return true;
+		return res;
 	}
 		
 	//Utiliser pour la selection et position des troupes
@@ -188,7 +193,6 @@ public class Terrain extends JPanel implements MouseListener{
 						}
 						
 					} else if (PossiblePlace(i,j)) { 
-						System.out.println("me exe");
 							
 						//Si la case est disponible, mets l'unite dans la case (nextUnite est update par les actionListener dans FenetreJeu)
 						tab[i][j].unite = nextUnit;
@@ -241,6 +245,7 @@ public class Terrain extends JPanel implements MouseListener{
 					//this.manager.fenetreJeu.panneauMoneyIncome.removeAll();
 					this.manager.fenetreJeu.afficheMoney();
 					this.manager.fenetreJeu.afficheRevenus();
+					this.manager.fenetreJeu.updateBalance();
 					
 				} 					
 			}

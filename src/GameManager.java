@@ -5,31 +5,22 @@ public class GameManager {
 
     public static CopyOnWriteArrayList<Joueur> playersList; // must be CopyOnWriteArrayList to update iterator when removing (avoid CurrentModificationException)
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330, 0x581845, 0x16A085 };
-    private int playersAlive;
-    public Affichage affichage;
-    public FenetreJeu fenetreJeu;
+    public Affichage affichage;//Cette fenetre c'est le menu
+    public FenetreJeu fenetreJeu;//Cela c'estle GUI pendant le jeu
     private Iterator<Joueur> playerIt; // Iterator est l'un des moyens de parcourir (traverse) les éléments d'une Collection.
-    private int nextPlayerColor;
-    private Terrain ter;
-
+    private Terrain ter; // Ceci est le terrain de jeu 
     private Joueur currentPlayer;
 
 	public GameManager() {
         this.playersList = new CopyOnWriteArrayList<Joueur>();
 
         this.affichage = new Affichage(this);
-        
+        // Dans affichage il y a EcouteurLaunch qui lance startGame 
         this.ter = new Terrain(1500,700,29,0,this);
 
-        this.nextPlayerColor = 0;
     }
-
-    public void setPlayersAlive(int n) {
-        this.playersAlive = n;
-    }
-
+    
     public void generatePlayers(int nbJoueurs) { //génère le nombre de joueurs demandés en modifiant l'attribut playerAlive
-        this.setPlayersAlive(nbJoueurs);
         for(int i=0;i<nbJoueurs;i++) {
             Joueur aux = new Joueur(colors[i]); // %colors.length
             this.playersList.add(aux);
@@ -56,7 +47,6 @@ public class GameManager {
 
     public void startGame(int nbJoueurs) { //méthode qui commence le jeu
         this.generatePlayers(nbJoueurs);
-        
         this.fenetreJeu = new FenetreJeu(this);
 		this.nextPlayer();
         affichage.setContentPane(fenetreJeu); //affiche la fenetre de jeu, c'est EcouteurLaunch qui clear l'écran précédent
@@ -74,7 +64,6 @@ public class GameManager {
         this.updateIterator();
 	}
 
-    public int getPlayerColor() { return this.nextPlayerColor; }
 
     public void nextPlayer() {
         if(!this.playerIt.hasNext()) this.playerIt = this.playersList.iterator();
@@ -83,7 +72,7 @@ public class GameManager {
         fenetreJeu.nextJoueur.initTour();
         fenetreJeu.afficheMoney();
 		fenetreJeu.afficheRevenus();
-        // this.nextPlayerColor = currentPlayer.getColor();
+		fenetreJeu.updateBalance();
         fenetreJeu.repaint();
         fenetreJeu.validate();
     }

@@ -24,6 +24,11 @@ public class FenetreJeu extends JPanel{
     private JPanel panneauHaut;
     public JPanel panneauMoneyIncome;
     
+    //Affichage personelle
+    private JPanel panneauMoneyPerso;
+    private JLabel Money;
+    private JLabel Income;
+    
     private JButton tour;
     private JButton tourForte;
     private JButton ferme;
@@ -72,6 +77,21 @@ public class FenetreJeu extends JPanel{
         
         this.panneauHaut = new JPanel();
         this.panneauMoneyIncome = new JPanel();
+        this.panneauMoneyPerso = new JPanel(new GridLayout(2,1));
+        panneauMoneyPerso.setBackground(Color.BLACK);	
+        
+        this.Money = new JLabel();
+        Money.setForeground(Color.WHITE);
+        Money.setText("    Argent    ");
+        
+        this.Income = new JLabel();
+        Income.setForeground(Color.WHITE);
+        Income.setText("    Income    ");
+
+        panneauMoneyPerso.add(Money);
+        panneauMoneyPerso.add(Income);        
+        //Juste le joueur
+        
         
         panneauHaut.setBackground(Color.BLACK);	
 		panneauHaut.add(parametres);
@@ -119,7 +139,7 @@ public class FenetreJeu extends JPanel{
        
        
 
-        
+        add(panneauMoneyPerso,BorderLayout.WEST);
         add(panneauHaut,BorderLayout.NORTH);
         add(panneauBas,BorderLayout.SOUTH);
         add(panneauMilieu,BorderLayout.CENTER);
@@ -154,6 +174,7 @@ public class FenetreJeu extends JPanel{
 
     public void setNextJoueur(Joueur j) {
         this.nextJoueur = j;
+        changeNextUnitStandBy(j);
         changeBackground();
     }
     
@@ -167,6 +188,10 @@ public class FenetreJeu extends JPanel{
 		for(int i = 0; i < manager.playersList.size(); i++) {
 			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+manager.getIncomeJoueurs()[i]);
 		}
+	}
+	public void updateBalance() {
+		Income.setText("    Income : " + nextJoueur.retIncome()+ "    ");
+		Money.setText("   Argent : " + nextJoueur.getMoney() + "    ");
 	}
 }
 

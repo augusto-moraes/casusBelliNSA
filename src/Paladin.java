@@ -1,7 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 
-
 public class Paladin extends Soldat{
 
   public Paladin(Joueur appartient ){

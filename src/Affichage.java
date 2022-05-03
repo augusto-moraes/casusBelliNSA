@@ -17,7 +17,6 @@ public class Affichage extends JFrame{
     private JButton PressStart;
     private Clip audioClipBoucle;
     
-    private JButton unjoueur;
     private JButton deuxjoueur;
     private JButton troisjoueur;
     private JButton quatrejoueur;
@@ -43,20 +42,17 @@ public class Affichage extends JFrame{
         credits.setText("CasusBellInsa is a game made by Rhino Entertainement, All rights reserved. Music from Clash Royale. Have fun !");
         
 		PressStart = mkButton("Sprites/images/pressStart.jpg");
-		unjoueur = mkButton("Sprites/images/1joueur.jpg");
 		deuxjoueur = mkButton("Sprites/images/2joueur.jpg");
 		troisjoueur = mkButton("Sprites/images/3joueur.jpg");
 		quatrejoueur =mkButton("Sprites/images/4joueur.jpg");
         
         PressStart.addActionListener(new EcouteurLaunch(this, 2)); 
-        unjoueur.addActionListener(new EcouteurLaunch(this, 1));
         deuxjoueur.addActionListener(new EcouteurLaunch(this, 2));
         troisjoueur.addActionListener(new EcouteurLaunch(this, 3));
         quatrejoueur.addActionListener(new EcouteurLaunch(this, 4));
                
         principal.add(PressStart);
         
-        choseNbPlayers.add(unjoueur);
         choseNbPlayers.add(deuxjoueur);
         choseNbPlayers.add(troisjoueur);
         choseNbPlayers.add(quatrejoueur);

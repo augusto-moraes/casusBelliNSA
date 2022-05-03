@@ -1,9 +1,9 @@
 import java.awt.event.*;
 
-public class EcouteurVal implements ActionListener {
+public class EcouteurValidate implements ActionListener {
 	private FenetreJeu fj;
 	
-    public EcouteurVal(FenetreJeu fj){
+    public EcouteurValidate(FenetreJeu fj){
 		this.fj = fj;
     }
     

@@ -92,7 +92,7 @@ public class FenetreJeu extends JPanel{
 
         panneauMilieu.add(ter);
         //Essaie pour les ecouteurs,a eliminer ou ailleurs car le joueur depende de game manager 
-		finDeTour.addActionListener(new EcouteurVal(this));
+		finDeTour.addActionListener(new EcouteurValidate(this));
         uniteNiveau1.addActionListener(new EcouteurUnites(this,ter,"Paysan")); 
 		uniteNiveau2.addActionListener(new EcouteurUnites(this,ter,"Lancier")); 
 		uniteNiveau3.addActionListener(new EcouteurUnites(this,ter,"Chevalier")); 

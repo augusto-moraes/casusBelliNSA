@@ -47,6 +47,7 @@ public class GameManager {
 
     // Dans affichage il y a EcouteurLaunch qui lance startGame 
     public void startGame(int nbJoueurs) { // méthode qui commence le jeu
+        affichage.stopMusic();
         this.generatePlayers(nbJoueurs);
         this.generateTerrain();
         this.fenetreJeu = new FenetreJeu(this);

@@ -92,6 +92,10 @@ public class Affichage extends JFrame{
             return;
         }
     }
+
+    public void stopMusic() {
+        audioClipBoucle.stop();
+    }
     
     public void clearScreen() {
         this.getContentPane().removeAll();

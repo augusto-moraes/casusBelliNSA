@@ -8,8 +8,7 @@ public class Unite {
     private int cout;
     public Joueur appartient;
     private int income;
-    //Essai une image par defaut pour pouvoir utiliser getImage de clases filles !! (Dans constructeur)
-    final public Image img =  null;
+    public Image img;
   
     public Unite(int cout, Joueur appartient, int income,int niveau){
         this.cout=cout;
@@ -17,6 +16,7 @@ public class Unite {
         this.income=income;
         this.niveau=niveau;
         this.Case = null;
+        this.img = null;
     }
     
     public void setCase(Case c) {

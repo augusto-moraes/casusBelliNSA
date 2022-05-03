@@ -11,7 +11,6 @@ public class Case implements Comparable<Case> {
 
     public int x;
     public int y;
-    private int potentiel;
     public int bcolor;
     public Unite unite;
     public Joueur appartient;

@@ -68,7 +68,7 @@ public class Joueur{
         this.nbCase=nbcases;
     }
     
-    public int retIncome(){ //calcule le revenu des unites du Joueur
+    public int getIncome(){ //calcule le revenu des unites du Joueur
         int somme=this.nbCase;
         for ( Unite a : lesUnites) {
             somme+= a.getIncome();
@@ -79,11 +79,11 @@ public class Joueur{
     
     public boolean initTour(){
         // récupérer son économie
-        while(lesUnites.size() != 0 && this.money+this.retIncome()<=0) { //tant qu'on a la somme de la monnaie et des incomes qui est négative, on tue la dernière unite du tableau d'unites
+        while(lesUnites.size() != 0 && this.money+this.getIncome()<=0) { //tant qu'on a la somme de la monnaie et des incomes qui est négative, on tue la dernière unite du tableau d'unites
             this.lesUnites.removeLast().Case.unite = null;
             
         }
-        this.money += this.retIncome();
+        this.money += this.getIncome();
         
         for(Unite a : lesUnites) {
             if (a instanceof Soldat) {

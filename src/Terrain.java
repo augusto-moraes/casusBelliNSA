@@ -48,6 +48,9 @@ public class Terrain extends JPanel implements MouseListener{
 			}
 		}	
 	}
+	public Unite getNextUnit() {
+		return nextUnit;
+	}
 	//Effacer un unite u du tableau (elimine l'image en remplissant l'hexagone (la couleur est dans la case qui aurait etait changer avant d'execute cette methode))
 	public void effacer(Unite u) {
 		for (int i = 0; i < tab.length; i++) {
@@ -233,20 +236,8 @@ public class Terrain extends JPanel implements MouseListener{
 						transition = false;
 						nextUnit = new Unite(0,nextUnit.appartient,0,0);
 						}
-					
-					//Testing
 					lastSelec = tab[i][j];
-					if (tab[i][j].unite != null) {
-						System.out.println(tab[i][j].unite.appartient);
-						System.out.println(tab[i][j].unite.appartient.lesUnites);
-						System.out.println();
-						System.out.println();
-					}
-					//this.manager.fenetreJeu.panneauMoneyIncome.removeAll();
-					this.manager.fenetreJeu.afficheMoney();
-					this.manager.fenetreJeu.afficheRevenus();
-					this.manager.fenetreJeu.updateBalance();
-					
+					this.manager.fenetreJeu.updateBalance();					
 				} 					
 			}
 		}		 

@@ -24,12 +24,12 @@ public class Affichage extends JFrame{
 
     private GameManager manager;
   
-    public Affichage(GameManager gm){
+    public Affichage(GameManager gm, int largeur, int hauteur){
         super("Casus Bellinsa");
 
         this.manager = gm;
         
-        setSize(1600,900);
+        setSize(largeur,hauteur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         principal = new JPanel(new BorderLayout());
@@ -37,7 +37,6 @@ public class Affichage extends JFrame{
         
         choseNbPlayers = new JPanel();
         choseNbPlayers.setBackground(Color.BLACK);
-        
 
         credits = new JTextArea();
         credits.setEditable(false);
@@ -62,7 +61,7 @@ public class Affichage extends JFrame{
         choseNbPlayers.add(troisjoueur);
         choseNbPlayers.add(quatrejoueur);
         
-        // PlayMusicEnBoucle("Sprites/music/music_1.wav", 0.70); 
+        PlayMusicEnBoucle("Sprites/music/music_1.wav", 0.70); 
                 
         this.add(principal);
         this.add(choseNbPlayers, BorderLayout.NORTH); 

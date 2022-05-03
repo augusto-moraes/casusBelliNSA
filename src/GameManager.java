@@ -1,25 +1,25 @@
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.awt.Dimension;
 import java.util.Iterator;
 
 public class GameManager {
 
     public static CopyOnWriteArrayList<Joueur> playersList; // must be CopyOnWriteArrayList to update iterator when removing (avoid CurrentModificationException)
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330, 0x581845, 0x16A085 };
-    public Affichage affichage;//Cette fenetre c'est le menu
-    public FenetreJeu fenetreJeu;//Cela c'estle GUI pendant le jeu
+    public Affichage affichage; // Cette fenetre c'est le menu
+    public FenetreJeu fenetreJeu; // Cela c'estle GUI pendant le jeu
     private Iterator<Joueur> playerIt; // Iterator est l'un des moyens de parcourir (traverse) les éléments d'une Collection.
     private Terrain ter; // Ceci est le terrain de jeu 
     private Joueur currentPlayer;
 
 	public GameManager() {
         this.playersList = new CopyOnWriteArrayList<Joueur>();
-
-        this.affichage = new Affichage(this);
-        // Dans affichage il y a EcouteurLaunch qui lance startGame 
-        this.ter = new Terrain(1500,700,29,0,this);
-
+        this.affichage = new Affichage(this,1400,800);
+        this.ter = new Terrain(1300,650,29,0,this);
+		ter.setPreferredSize(new Dimension(1300, 650));
+        ter.addMouseListener(ter);
     }
-    
+
     public void generatePlayers(int nbJoueurs) { //génère le nombre de joueurs demandés en modifiant l'attribut playerAlive
         for(int i=0;i<nbJoueurs;i++) {
             Joueur aux = new Joueur(colors[i]); // %colors.length
@@ -45,55 +45,41 @@ public class GameManager {
 
     public Terrain getTerrain() { return this.ter; }
 
-    public void startGame(int nbJoueurs) { //méthode qui commence le jeu
+    // Dans affichage il y a EcouteurLaunch qui lance startGame 
+    public void startGame(int nbJoueurs) { // méthode qui commence le jeu
         this.generatePlayers(nbJoueurs);
+        this.generateTerrain();
         this.fenetreJeu = new FenetreJeu(this);
 		this.nextPlayer();
-        affichage.setContentPane(fenetreJeu); //affiche la fenetre de jeu, c'est EcouteurLaunch qui clear l'écran précédent
+        affichage.setContentPane(fenetreJeu); // affiche la fenetre de jeu, c'est EcouteurLaunch qui clear l'écran précédent
         affichage.repaint();
         affichage.validate();
     }
 
+    // iterator needs to be updated every time a player is dead
     public void updateIterator() {
         this.playerIt = this.playersList.iterator();
         while(this.playerIt.hasNext() && this.playerIt.next() != this.currentPlayer) {}
     }
+
+    // public void victoire() {
+    //     this.affichage.clearScreen();
+
+    // }
     
     public void removePlayer(Joueur joueurMort) {
 		this.playersList.remove(joueurMort);
         this.updateIterator();
+        //if(this.playerList.size() == 1) this.victoire();
 	}
 
-
     public void nextPlayer() {
-        if(!this.playerIt.hasNext()) this.playerIt = this.playersList.iterator();
+        if(!this.playerIt.hasNext()) { this.playerIt = this.playersList.iterator(); }
         this.currentPlayer = this.playerIt.next();
         fenetreJeu.setNextJoueur(this.currentPlayer);
         fenetreJeu.nextJoueur.initTour();
-        fenetreJeu.afficheMoney();
-		fenetreJeu.afficheRevenus();
 		fenetreJeu.updateBalance();
         fenetreJeu.repaint();
         fenetreJeu.validate();
     }
-    
-    public static int[] getIncomeJoueurs() {
-		int[] incomes = new int[playersList.size()];
-		int cpt = 0;
-		for(Joueur j : playersList) {
-			incomes[cpt] = j.retIncome();
-			cpt++;
-		}
-		return incomes;
-	}
-	
-	public static int[] getMoneyJoueurs() {
-		int[] argent = new int[playersList.size()];
-		int cpt = 0;
-		for(Joueur j : playersList) {
-			argent[cpt] = j.getMoney();
-			cpt++;
-		}
-		return argent;
-	}
 }

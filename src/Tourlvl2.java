@@ -3,14 +3,10 @@ import javax.swing.*;
 
 public class Tourlvl2 extends Batiment {
 	
-  // init img dans constructor avec try catch !!!
-  final public Image img = new ImageIcon(getClass().getResource("Sprites/images/Strong_tower.png")).getImage();
-	
-  public Tourlvl2(int cout, Joueur appartient){		
-		super(cout, appartient,4, 0, "Tour");
-  }
-  
-  public Image getImage() {
-	  return img;
+  public Tourlvl2(Joueur appartient){		
+		super(35, appartient,-6, 4, "Tour");
+		try {
+      this.img = new ImageIcon(getClass().getResource("Sprites/images/Strong_tower.png")).getImage();
+    } catch (Exception e) {}
   }
 }

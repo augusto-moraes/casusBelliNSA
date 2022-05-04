@@ -17,19 +17,18 @@ public class Affichage extends JFrame{
     private JButton PressStart;
     private Clip audioClipBoucle;
     
-    private JButton unjoueur;
     private JButton deuxjoueur;
     private JButton troisjoueur;
     private JButton quatrejoueur;
 
     private GameManager manager;
   
-    public Affichage(GameManager gm){
+    public Affichage(GameManager gm, int largeur, int hauteur){
         super("Casus Bellinsa");
 
         this.manager = gm;
         
-        setSize(1600,900);
+        setSize(largeur,hauteur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         principal = new JPanel(new BorderLayout());
@@ -37,32 +36,28 @@ public class Affichage extends JFrame{
         
         choseNbPlayers = new JPanel();
         choseNbPlayers.setBackground(Color.BLACK);
-        
 
         credits = new JTextArea();
         credits.setEditable(false);
         credits.setText("CasusBellInsa is a game made by Rhino Entertainement, All rights reserved. Music from Clash Royale. Have fun !");
         
 		PressStart = mkButton("Sprites/images/pressStart.jpg");
-		unjoueur = mkButton("Sprites/images/1joueur.jpg");
 		deuxjoueur = mkButton("Sprites/images/2joueur.jpg");
 		troisjoueur = mkButton("Sprites/images/3joueur.jpg");
 		quatrejoueur =mkButton("Sprites/images/4joueur.jpg");
         
         PressStart.addActionListener(new EcouteurLaunch(this, 2)); 
-        unjoueur.addActionListener(new EcouteurLaunch(this, 1));
         deuxjoueur.addActionListener(new EcouteurLaunch(this, 2));
         troisjoueur.addActionListener(new EcouteurLaunch(this, 3));
         quatrejoueur.addActionListener(new EcouteurLaunch(this, 4));
                
         principal.add(PressStart);
         
-        choseNbPlayers.add(unjoueur);
         choseNbPlayers.add(deuxjoueur);
         choseNbPlayers.add(troisjoueur);
         choseNbPlayers.add(quatrejoueur);
         
-        // PlayMusicEnBoucle("Sprites/music/music_1.wav", 0.70); 
+        PlayMusicEnBoucle("Sprites/music/music_1.wav", 0.70); 
                 
         this.add(principal);
         this.add(choseNbPlayers, BorderLayout.NORTH); 
@@ -96,6 +91,10 @@ public class Affichage extends JFrame{
             e.printStackTrace();
             return;
         }
+    }
+
+    public void stopMusic() {
+        audioClipBoucle.stop();
     }
     
     public void clearScreen() {

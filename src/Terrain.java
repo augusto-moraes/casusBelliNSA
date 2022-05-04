@@ -6,23 +6,23 @@ import javax.imageio.*;
 
 public class Terrain extends JPanel implements MouseListener{
 
-    public final int WIDTH ; //largeur
-    public final int HEIGHT; //hauteur
+    private final int WIDTH ; //largeur
+    private final int HEIGHT; //hauteur
     public Case[][] tab;   //Tableau avec les unites 
-    public int Rinscrit;	//rayon cercle inscrit de l'hexagone
-    public Unite nextUnit; //unité qu'on a sélectionné dans la barre d'unités
+    private int Rinscrit;	//rayon cercle inscrit de l'hexagone
+    private Unite nextUnit; //unité qu'on a sélectionné dans la barre d'unités
 
     public int radius; //Rayon de l'hexagone externe
     public int col; //colonne
     public int row; //ligne
 
-    public Image imgFond; //Image de fond
-    public int padding; //remplissage
-    public Graphics2D g;
-    public Case lastSelec; //Accesoire pour selectioner 
+    private Image imgFond; //Image de fond
+    private int padding; //remplissage
+    private Graphics2D g;
+    private Case lastSelec; //Accesoire pour selectioner 
     private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330 };
     private GameManager manager;
-    public boolean transition; //Pour voir si c'est un deplacement d'une case
+    private boolean transition; //Pour voir si c'est un deplacement d'une case
 
     
 
@@ -48,11 +48,18 @@ public class Terrain extends JPanel implements MouseListener{
 			}
 		}	
 	}
+	public void setTransition(boolean vec) {
+		this.transition = vec;
+	}
+	
+	public Unite getNextUnit() {
+		return nextUnit;
+	}
 	//Effacer un unite u du tableau (elimine l'image en remplissant l'hexagone (la couleur est dans la case qui aurait etait changer avant d'execute cette methode))
 	public void effacer(Unite u) {
 		for (int i = 0; i < tab.length; i++) {
 			for (int j = 0; j < tab[0].length; j++) { 
-				if (u.equals(tab[i][j].unite)) {
+				if (u.equals(tab[i][j].getUnite())) {
 					doHex(g,tab[i][j]);
 					break;
 				}
@@ -64,9 +71,9 @@ public class Terrain extends JPanel implements MouseListener{
 	public boolean PossiblePlace(int x,int y) {
 		boolean possible = false;
 		// On peut que deplacer si le prochain unite n'est pas null
-		if (nextUnit != null && (transition == true ||  (nextUnit.appartient.getMoney() - nextUnit.getCout()) >= 0)) {
+		if (nextUnit != null && (transition == true ||  (nextUnit.getJoueur().getMoney() - nextUnit.getCout()) >= 0)) {
 			// Si l'unité est un batiment, et la case est du meme joueur que le bat et la case n'as pas d'unité
-			if (nextUnit instanceof Batiment && tab[x][y].appartient == nextUnit.appartient && tab[x][y].unite == null) {
+			if (nextUnit instanceof Batiment && tab[x][y].getJoueur() == nextUnit.getJoueur() && tab[x][y].getUnite() == null) {
 				possible = true;
 				//D'autre part si c'est un soldat et une Case Voisine est de la même couleur que la prochaine unite 
 				//On mesure les differences de puissance 
@@ -74,17 +81,17 @@ public class Terrain extends JPanel implements MouseListener{
 			} else if (nextUnit instanceof Soldat &&  checkVoisin(x,y)) {
 				if ( checkVoisinTour(x,y,nextUnit)){
                     
-                    if (tab[x][y].unite != null && tab[x][y].appartient != nextUnit.appartient && nextUnit.getNiveau()>=tab[x][y].unite.getNiveau()) { /*
+                    if (tab[x][y].getUnite() != null && tab[x][y].getJoueur() != nextUnit.getJoueur() && nextUnit.getNiveau()>=tab[x][y].getUnite().getNiveau()) { /*
                         si la case contient une unité qui n'est pas de la couleur du joueur dont c'est le tour
                         * on supprime l'unité déjà présente sur la case (donc l'unité du joueur attaqué)
                         * on rajoute la case dans les appartenances du Joueur (donc le Joueur offensif a gagné
                         * une case), et on retourne true*/
-                        if (tab[x][y].unite instanceof TownHall) {
-                            Joueur jp = tab[x][y].appartient;
+                        if (tab[x][y].getUnite() instanceof TownHall) {
+                            Joueur jp = tab[x][y].getJoueur();
                             manager.removePlayer(jp);
                             for (int i = 0; i < tab.length; i++) {
                                 for (int j = 0; j < tab[0].length; j++) { 
-                                    if (tab[i][j].appartient == jp) {
+                                    if (tab[i][j].getJoueur() == jp) {
                                         tab[i][j] = new Case(tab[i][j].x,tab[i][j].y);
                                     }
                                 }
@@ -93,14 +100,14 @@ public class Terrain extends JPanel implements MouseListener{
                             this.validate();
                         }
                         else {
-                            tab[x][y].appartient.lesUnites.remove(tab[x][y].unite);
-                            tab[x][y].appartient.enleveCases(1);
+                            tab[x][y].getJoueur().getListUnites().remove(tab[x][y].getUnite());
+                            tab[x][y].getJoueur().enleveCases(1);
                         }
-                        nextUnit.appartient.addCase(); 
+                        nextUnit.getJoueur().addCase(); 
                         possible = true;
-                    } else if (tab[x][y].unite == null) { //si pas d'unité sur la case, on la prend direct
-                        if (tab[x][y].appartient == null) {
-                            nextUnit.appartient.addCase();
+                    } else if (tab[x][y].getUnite() == null) { //si pas d'unité sur la case, on la prend direct
+                        if (tab[x][y].getJoueur() == null) {
+                            nextUnit.getJoueur().addCase();
                         }
                         possible = true;
                     }
@@ -116,8 +123,8 @@ public class Terrain extends JPanel implements MouseListener{
 		for(int i : directions) {
 			for(int j : directions) {
 				if(!((y%2 != 0 && i == 1 && j!=0) || (y%2 == 0 && i == -1 && j!=0))) {
-					if(x+i>=0 && x+i<tab.length && y+j>=0 && y+j<tab[0].length && tab[x+i][y+j].appartient != null 
-					&& tab[x+i][y+j].appartient.getId() == nextUnit.appartient.getId())
+					if(x+i>=0 && x+i<tab.length && y+j>=0 && y+j<tab[0].length && tab[x+i][y+j].getJoueur() != null 
+					&& tab[x+i][y+j].getJoueur().getId() == nextUnit.getJoueur().getId())
 						return true;
 				}
 			}
@@ -133,8 +140,8 @@ public class Terrain extends JPanel implements MouseListener{
 		for(int i : directions) {
 			for(int j : directions) {
 				if(!((y%2 != 0 && i == 1 && j!=0) || (y%2 == 0 && i == -1 && j!=0))) {
-					if(x+i>=0 && x+i<tab.length && y+j>=0 && y+j<tab[0].length && tab[x+i][y+j].appartient != null 
-					&& (tab[x+i][y+j].unite instanceof Tour || tab[x+i][y+j].unite instanceof Tourlvl2 || tab[x+i][y+j].unite instanceof Paladin ) && tab[x+i][y+j].unite.getNiveau()> unite.getNiveau() && tab[x+i][y+j].appartient != nextUnit.appartient)
+					if(x+i>=0 && x+i<tab.length && y+j>=0 && y+j<tab[0].length && tab[x+i][y+j].getJoueur() != null 
+					&& (tab[x+i][y+j].getUnite() instanceof Tour || tab[x+i][y+j].getUnite() instanceof Tourlvl2 || tab[x+i][y+j].getUnite() instanceof Paladin ) && tab[x+i][y+j].getUnite().getNiveau()> unite.getNiveau() && tab[x+i][y+j].getJoueur() != nextUnit.getJoueur())
 						res = false;
 				}
 			}
@@ -160,9 +167,9 @@ public class Terrain extends JPanel implements MouseListener{
 	//Dessine la figure dans la case correspondante
 	public void setUnite(Case c) {
 		Graphics2D g = (Graphics2D)this.getGraphics();
-		c.unite.setCase(c);
+		c.getUnite().setCase(c);
 		try {
-			Image pic = c.unite.getImage();
+			Image pic = c.getUnite().getImage();
 			g.drawImage(pic,c.x - Rinscrit/2,c.y-Rinscrit/2,Rinscrit,Rinscrit,this);
 		} catch (Exception e) {} 
 	}
@@ -175,18 +182,18 @@ public class Terrain extends JPanel implements MouseListener{
 				if ((Math.pow(tab[i][j].x - x,2) + Math.pow(tab[i][j].y - y,2) < Math.pow(Rinscrit,2))) { 
 					if (lastSelec != null) {
 						//La case selectione precedente et change de couleur jaune a gris
-						lastSelec.bcolor = 0xd9d9d9;
+						lastSelec.setBcolor( 0xd9d9d9);
 						drawBorder(g, lastSelec) ;
 					} 
 					//Test si on click dans une case avec un soldat de notre color
-					if (tab[i][j].unite != null && tab[i][j].unite instanceof Soldat  && nextUnit.appartient == tab[i][j].appartient) {
+					if (tab[i][j].getUnite() != null && tab[i][j].getUnite() instanceof Soldat  && nextUnit.getJoueur() == tab[i][j].getJoueur()) {
 						//Si le soldat peut de deplacer mettre en nextUnit le soldat et true pour transition (Pour l'efface apres)
-						if (((Soldat)tab[i][j].unite).getdeplacement() == true) {
-							nextUnit = tab[i][j].unite;
+						if (((Soldat)tab[i][j].getUnite()).getdeplacement() == true) {
+							nextUnit = tab[i][j].getUnite();
 							transition = true;
 							
 						} else {//Si on click sur un de nos soldat il se passe rien () le nextUnit devient un StandBy
-							 nextUnit = new Unite(0,nextUnit.appartient,0,0);
+							 nextUnit = new Unite(0,nextUnit.getJoueur(),0,0);
 							 transition = false;
 							 
 							
@@ -195,12 +202,12 @@ public class Terrain extends JPanel implements MouseListener{
 					} else if (PossiblePlace(i,j)) { 
 							
 						//Si la case est disponible, mets l'unite dans la case (nextUnite est update par les actionListener dans FenetreJeu)
-						tab[i][j].unite = nextUnit;
+						tab[i][j].setUnite(nextUnit);
 						
 						//Met dans la case le joueur qui la possede
-						tab[i][j].appartient = nextUnit.appartient;
-						int color = nextUnit.appartient.getColor(); //Met la couleur du joueur dans la case
-						tab[i][j].setColor(color);
+						tab[i][j].setJoueur(nextUnit.getJoueur());
+						//Met la couleur du joueur dans la case
+						tab[i][j].setColor(nextUnit.getJoueur().getColor());
 						//Dessine l'hexagone
 						doHex(g,tab[i][j]);
 						//Mets la figure dans l'ecran
@@ -209,8 +216,8 @@ public class Terrain extends JPanel implements MouseListener{
 						drawBorder(g, tab[i][j]) ;
 						//Si c'est un changement eliminer la possibilite de bouger a nouveau au soldat et effacer la case (Peindre sur la figure)  
 						if (transition) {
-							((Soldat)tab[i][j].unite).setdeplacement(false);
-								lastSelec.unite = null;
+							((Soldat)tab[i][j].getUnite()).setdeplacement(false);
+								lastSelec.setUnite(null);
 								//Ce lastSelec c'est le meme id que tab[][] precedant dont on efface l'unite 
 								doHex(g,lastSelec);
 								transition = false; 
@@ -218,40 +225,28 @@ public class Terrain extends JPanel implements MouseListener{
 
 						} else {
 							//et ajoute la piece que si ce n'est pas une transition
-							nextUnit.appartient.lesUnites.add(nextUnit);
-							//	if (!nextUnit.appartient.lesUnites.contains(nextUnit)) {
-							nextUnit.appartient.achatCout(nextUnit);
+							nextUnit.getJoueur().getListUnites().add(nextUnit);
+							//	if (!nextUnit.getJoueur().getListUnites().contains(nextUnit)) {
+							nextUnit.getJoueur().achatCout(nextUnit);
 							//}
 					
 						}
 						//Mettre un StandBy pour obliger à clicker sur le bouton de 
 						//nouveau pour creer une nouvelle unite (sinon meme unite dans toute les cases)
-						nextUnit = new Unite(0,nextUnit.appartient,0,0);
+						nextUnit = new Unite(0,nextUnit.getJoueur(),0,0);
 							
 					} else {
 						//Si c'est pas possible un deplacement ni mettre une unite, faire un stanby total
 						transition = false;
-						nextUnit = new Unite(0,nextUnit.appartient,0,0);
+						nextUnit = new Unite(0,nextUnit.getJoueur(),0,0);
 						}
-					
-					//Testing
 					lastSelec = tab[i][j];
-					if (tab[i][j].unite != null) {
-						System.out.println(tab[i][j].unite.appartient);
-						System.out.println(tab[i][j].unite.appartient.lesUnites);
-						System.out.println();
-						System.out.println();
-					}
-					//this.manager.fenetreJeu.panneauMoneyIncome.removeAll();
-					this.manager.fenetreJeu.afficheMoney();
-					this.manager.fenetreJeu.afficheRevenus();
-					this.manager.fenetreJeu.updateBalance();
-					
+					this.manager.fenetreJeu.updateBalance();					
 				} 					
 			}
 		}		 
 			//Couleur Jaune a la case selectioner
-			lastSelec.bcolor = 0xffff00;
+			lastSelec.setBcolor(0xffff00);
 			drawBorder(g, lastSelec) ;					
 	}
 
@@ -299,9 +294,9 @@ public class Terrain extends JPanel implements MouseListener{
 					doHex(g,c);
 					//hex.draw(g, p, j  , 0, c.color, c.fill);
 				}
-				if (c.unite != null) {
+				if (c.getUnite() != null) {
 					//Si ils ont une unite, il dessine la figure correpondante
-					g.drawImage(c.unite.getImage(),c.x - Rinscrit/2,c.y-Rinscrit/2,Rinscrit,Rinscrit,this);
+					g.drawImage(c.getUnite().getImage(),c.x - Rinscrit/2,c.y-Rinscrit/2,Rinscrit,Rinscrit,this);
 				}
 				drawBorder(g,c);
 
@@ -315,7 +310,7 @@ public class Terrain extends JPanel implements MouseListener{
 	//Cree le bord hexagonal
 	 private void drawBorder(Graphics2D g,Case c) {
         Hexagon hex = new Hexagon(c.x, c.y, radius);
-		hex.draw(g , 4, c.bcolor , false);
+		hex.draw(g , 4, c.getBcolor() , false);
 
 	}
 	//dessine l'hexagone

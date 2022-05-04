@@ -1,23 +1,16 @@
 import java.awt.*;
 import javax.swing.*;
 
-
 public class Paysan extends Soldat{
-	
-  // init img dans constructor avec try catch !!!
-	final public Image img = new ImageIcon(getClass().getResource("Sprites/images/unitelv1.png")).getImage();
 
-  public Paysan( Joueur appartient){
-    super(1, appartient, -1,1,1);
+  public Paysan(Joueur appartient){
+    super(10, appartient, -2,1,1);
+    try {
+      this.img = new ImageIcon(getClass().getResource("Sprites/images/unitelv1.png")).getImage();
+    } catch (Exception e) {}
 
   }
   public String toString() {
 	  return "Paysan";
   }
-  
-  public Image getImage() {
-	  return img;
-  }
-
-
 }

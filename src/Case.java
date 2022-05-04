@@ -11,14 +11,34 @@ public class Case implements Comparable<Case> {
 
     public int x;
     public int y;
-    private int potentiel;
-    public int bcolor;
-    public Unite unite;
-    public Joueur appartient;
+	private int bcolor;
+    private Unite unite;
+    private Joueur appartient;
     public int id;
     public int color;
     public boolean fill;
     public Image img;
+    
+    public int getBcolor() {
+		return bcolor;
+	}
+	public void setBcolor(int col) {
+		this.bcolor = col;
+	}
+    
+    public Joueur getJoueur() {
+		return appartient;
+	}
+	public void setJoueur(Joueur j) {
+		this.appartient = j;
+	}
+	
+	public Unite getUnite() {
+		return unite;
+	}
+	public void setUnite(Unite u) {
+		this.unite = u;
+	}
 
     public Case(int x,int y,Joueur j,int bcolor) {
 		this.x = x;

@@ -22,10 +22,7 @@ public class FenetreJeu extends JPanel{
     private JButton uniteNiveau4;
     
     private JPanel panneauHaut;
-    public JPanel panneauMoneyIncome;
-    
-    //Affichage personelle
-    private JPanel panneauMoneyPerso;
+    private JPanel ArgentJoueur;
     private JLabel Money;
     private JLabel Income;
     
@@ -38,19 +35,17 @@ public class FenetreJeu extends JPanel{
     private JLabel[] tabRevenus;
     
     private GameManager manager;
-    private Terrain p;
+    private Terrain ter;
 
-    public Joueur nextJoueur;
+    private Joueur nextJoueur;
     
     public FenetreJeu(GameManager gm) {
         this.manager = gm;
-        this.p = manager.getTerrain();
+        this.ter = manager.getTerrain();
 
 		setLayout(new BorderLayout());
         
         finDeTour = mkButton("Sprites/images/finDuTour.png");
-        annulerAction = mkButton("Sprites/images/retourArriere.png");
-        parametres = mkButton("Sprites/images/parametres.png");
         
         uniteNiveau1 = mkButton("Sprites/images/unitelv1.png");
         uniteNiveau2 = mkButton("Sprites/images/unitelv2.png");
@@ -65,7 +60,6 @@ public class FenetreJeu extends JPanel{
         JPanel panneauBas = new JPanel();
         panneauBas.setBackground(Color.BLACK);
         
-        panneauBas.add(annulerAction);
         panneauBas.add(ferme);
         panneauBas.add(tour);
         panneauBas.add(tourForte);
@@ -76,85 +70,51 @@ public class FenetreJeu extends JPanel{
         panneauBas.add(finDeTour);
         
         this.panneauHaut = new JPanel();
-        this.panneauMoneyIncome = new JPanel();
-        this.panneauMoneyPerso = new JPanel(new GridLayout(2,1));
-        panneauMoneyPerso.setBackground(Color.BLACK);	
+        panneauHaut.setBackground(Color.BLACK);	
+        
+        this.ArgentJoueur = new JPanel(new GridLayout(2,1));
+        ArgentJoueur.setBackground(Color.BLACK);	
         
         this.Money = new JLabel();
         Money.setForeground(Color.WHITE);
         Money.setText("    Argent    ");
+        ArgentJoueur.add(Money);
         
         this.Income = new JLabel();
         Income.setForeground(Color.WHITE);
         Income.setText("    Income    ");
+        ArgentJoueur.add(Income);        
 
-        panneauMoneyPerso.add(Money);
-        panneauMoneyPerso.add(Income);        
-        //Juste le joueur
-        
-        
-        panneauHaut.setBackground(Color.BLACK);	
-		panneauHaut.add(parametres);
-		panneauHaut.add(panneauMoneyIncome);
-		
-  
-		
-		add(panneauHaut,BorderLayout.NORTH);
-        
+		panneauHaut.add(ArgentJoueur);
+		      
         JPanel panneauMilieu = new JPanel();
-        
         panneauMilieu.setBackground(Color.BLACK);		
 
-        // Set terrain stuff (sur game manager?)
-		p.setPreferredSize(new Dimension(1500, 700));
-        p.addMouseListener(p);
-        // à mettre sur game manager si possible et enlever game manager des parametres de fenetre jeu?
-		manager.generateTerrain();
-
-        panneauMilieu.add(p);
+        panneauMilieu.add(ter);
         //Essaie pour les ecouteurs,a eliminer ou ailleurs car le joueur depende de game manager 
-		finDeTour.addActionListener(new EcouteurVal(this));
-        uniteNiveau1.addActionListener(new EcouteurUnites(this,p,"Paysan")); 
-		uniteNiveau2.addActionListener(new EcouteurUnites(this,p,"Lancier")); 
-		uniteNiveau3.addActionListener(new EcouteurUnites(this,p,"Chevalier")); 
-		uniteNiveau4.addActionListener(new EcouteurUnites(this,p,"Paladin"));  
+		finDeTour.addActionListener(new EcouteurValidate(this));
+        uniteNiveau1.addActionListener(new EcouteurUnites(this,ter,"Paysan")); 
+		uniteNiveau2.addActionListener(new EcouteurUnites(this,ter,"Lancier")); 
+		uniteNiveau3.addActionListener(new EcouteurUnites(this,ter,"Chevalier")); 
+		uniteNiveau4.addActionListener(new EcouteurUnites(this,ter,"Paladin"));  
 		
-		tour.addActionListener(new EcouteurUnites(this,p,"Tour")); 
-        tourForte.addActionListener(new EcouteurUnites(this,p,"Tourlvl2")); 
-        ferme.addActionListener(new EcouteurUnites(this,p,"Mine")); 
+		tour.addActionListener(new EcouteurUnites(this,ter,"Tour")); 
+        tourForte.addActionListener(new EcouteurUnites(this,ter,"Tourlvl2")); 
+        ferme.addActionListener(new EcouteurUnites(this,ter,"Mine")); 
         
-        this.tabMoney = new JLabel[manager.playersList.size()];
-		for(int i = 0; i < tabMoney.length; i++) {
-			tabMoney[i] = new JLabel();
-			tabMoney[i].setText("Argent joueur "+(i+1)+": "+manager.getMoneyJoueurs()[i]);
-			panneauMoneyIncome.add(tabMoney[i]);
-		}
-		
-		this.tabRevenus = new JLabel[manager.playersList.size()];
-		for(int i = 0; i < tabRevenus.length; i++) {
-			tabRevenus[i] = new JLabel();
-			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+manager.getIncomeJoueurs()[i]);
-			panneauMoneyIncome.add(tabRevenus[i]);
-		}
-       
-       
-
-        add(panneauMoneyPerso,BorderLayout.WEST);
+     
         add(panneauHaut,BorderLayout.NORTH);
         add(panneauBas,BorderLayout.SOUTH);
         add(panneauMilieu,BorderLayout.CENTER);
-        
  
-       
-        
     }
+
     public void changeBackground() {
-		int c = nextJoueur.getColor();
-		Color colo = new Color(c);
-		this.panneauHaut.setBackground(colo);	
-		this.panneauMoneyIncome.setBackground(colo);	
-	}
-		
+		int newColor = nextJoueur.getColor();
+		Color color = new Color(newColor);
+		this.panneauHaut.setBackground(color);	
+		this.ArgentJoueur.setBackground(color);	
+	}	
     
     public JButton mkButton(String url){
 		JButton b = new JButton(new ImageIcon(url));
@@ -165,11 +125,14 @@ public class FenetreJeu extends JPanel{
 	}
 	//Change la variable dans terrain du joueur et met un StandBy
 	public void changeNextUnitStandBy(Joueur j) {
-		this.p.setNextUnit(new Unite(0,j,0,0));
+		this.ter.setNextUnit(new Unite(0,j,0,0));
 	}
 	//Demande le prochain joueur 
-	public void NextPlayer() {
+	public void nextPlayer() {
 		manager.nextPlayer();
+	}
+	public Joueur getNextJoueur() {
+		return nextJoueur;
 	}
 
     public void setNextJoueur(Joueur j) {
@@ -177,21 +140,15 @@ public class FenetreJeu extends JPanel{
         changeNextUnitStandBy(j);
         changeBackground();
     }
-    
-    public void afficheMoney() {
-		for(int i = 0; i < manager.playersList.size(); i++) {
-			tabMoney[i].setText("Argent joueur "+(i+1)+": "+manager.getMoneyJoueurs()[i]);
-		}
+
+	public void updateBalance() {
+		Income.setText("    Income : " + nextJoueur.getIncome()+ "    ");
+		Money.setText("   Argent : " + nextJoueur.getMoney() + "    ");
 	}
 	
-	public void afficheRevenus() {
-		for(int i = 0; i < manager.playersList.size(); i++) {
-			tabRevenus[i].setText("Revenus joueur "+(i+1)+": "+manager.getIncomeJoueurs()[i]);
-		}
-	}
-	public void updateBalance() {
-		Income.setText("    Income : " + nextJoueur.retIncome()+ "    ");
-		Money.setText("   Argent : " + nextJoueur.getMoney() + "    ");
+	public void showPrice() {
+		Income.setText("    Income : " + nextJoueur.getIncome()+ " (" + ter.getNextUnit().getIncome()+")" );
+		Money.setText("   Argent : " + nextJoueur.getMoney() + " (" + ter.getNextUnit().getCout() + ")");
 	}
 }
 

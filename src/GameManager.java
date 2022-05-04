@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class GameManager {
 
     public static CopyOnWriteArrayList<Joueur> playersList; // must be CopyOnWriteArrayList to update iterator when removing (avoid CurrentModificationException)
-    private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330, 0x581845, 0x16A085 };
+    private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0x581845, 0x16A085, 0xe0e330 };
     public Affichage affichage; // Cette fenetre c'est le menu
     public FenetreJeu fenetreJeu; // Cela c'est le GUI pendant le jeu
     private Iterator<Joueur> playerIt; 

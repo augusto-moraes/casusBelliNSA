@@ -123,6 +123,7 @@ public class FenetreJeu extends JPanel{
 		b.setBorderPainted(false);
 		return b;
 	}
+    
 	// Change la variable dans terrain du joueur et met un StandBy
 	public void changeNextUnitStandBy(Joueur j) {
 		this.ter.setNextUnit(new Unite(0,j,0,0));

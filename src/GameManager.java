@@ -72,11 +72,6 @@ public class GameManager {
         this.playerIt = this.playersList.iterator();
         while(this.playerIt.hasNext() && this.playerIt.next() != this.currentPlayer) {}
     }
-
-    // public void victoire() {
-    //     this.affichage.clearScreen();
-
-    // }
     
     public void removePlayer(Joueur joueurMort) {
 		this.playersList.remove(joueurMort);

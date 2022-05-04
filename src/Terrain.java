@@ -20,7 +20,6 @@ public class Terrain extends JPanel implements MouseListener{
     private int padding; //remplissage
     private Graphics2D g;
     private Case lastSelec; //Accesoire pour selectioner 
-    private final int[] colors = { 0x9e2703, 0x229c19 ,0x1625a8, 0xe0e330 };
     private GameManager manager;
     private boolean transition; //Pour voir si c'est un deplacement d'une case
 
@@ -176,7 +175,7 @@ public class Terrain extends JPanel implements MouseListener{
 	
 	public void Clicked(int x,int y) {
 		Graphics2D g = (Graphics2D)this.getGraphics();
-		//parcours des coordonnees x y graphiques pour voir si se trouve dans l'hexagone
+		//parcours des coordonnees x et y graphiques pour touver l'hexagone clicke
 		for (int i = 0; i < tab.length; i++) {
 			for (int j = 0; j < tab[0].length; j++) { 
 				if ((Math.pow(tab[i][j].x - x,2) + Math.pow(tab[i][j].y - y,2) < Math.pow(Rinscrit,2))) { 
@@ -208,11 +207,8 @@ public class Terrain extends JPanel implements MouseListener{
 						tab[i][j].setJoueur(nextUnit.getJoueur());
 						//Met la couleur du joueur dans la case
 						tab[i][j].setColor(nextUnit.getJoueur().getColor());
-						//Dessine l'hexagone
 						doHex(g,tab[i][j]);
-						//Mets la figure dans l'ecran
 						setUnite(tab[i][j]);
-						//dessine le bord en couleur gris
 						drawBorder(g, tab[i][j]) ;
 						//Si c'est un changement eliminer la possibilite de bouger a nouveau au soldat et effacer la case (Peindre sur la figure)  
 						if (transition) {

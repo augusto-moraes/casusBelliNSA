@@ -13,27 +13,28 @@ public class EcouteurUnites implements ActionListener {
     
   public void actionPerformed(ActionEvent ae){
 	Unite u = null;
+	Joueur nextJoueur = fj.getNextJoueur();
 	switch(this.type) {
 		case "Paysan":
-			u = new Paysan(fj.getNextJoueur());
+			u = new Paysan(nextJoueur);
 			break;
 		case "Lancier":
-			u = new Lancier(fj.getNextJoueur());
+			u = new Lancier(nextJoueur);
 			break;
 		case "Chevalier":
-			u = new Chevalier(fj.getNextJoueur());
+			u = new Chevalier(nextJoueur);
 			break;
 		case "Paladin":
-			u = new Paladin(fj.getNextJoueur());
+			u = new Paladin(nextJoueur);
 			break;
 		case "Tour":
-			u = new Tour(fj.getNextJoueur());
+			u = new Tour(nextJoueur);
 			break;
 		case "Tourlvl2":
-			u = new Tourlvl2(fj.getNextJoueur());
+			u = new Tourlvl2(nextJoueur);
 			break;
 		case "Mine":
-			u = new Mine(fj.getNextJoueur());
+			u = new Mine(nextJoueur);
 			break;
 	}
 

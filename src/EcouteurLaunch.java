@@ -11,7 +11,6 @@ public class EcouteurLaunch implements ActionListener {
     }
     
     public void actionPerformed(ActionEvent ae){	
-        fen.clearScreen(); 
         fen.startGame(nbJoueurs); 
     }
 }

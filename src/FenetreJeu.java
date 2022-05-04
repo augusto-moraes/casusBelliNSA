@@ -123,11 +123,13 @@ public class FenetreJeu extends JPanel{
 		b.setBorderPainted(false);
 		return b;
 	}
-	//Change la variable dans terrain du joueur et met un StandBy
+    
+	// Change la variable dans terrain du joueur et met un StandBy
 	public void changeNextUnitStandBy(Joueur j) {
 		this.ter.setNextUnit(new Unite(0,j,0,0));
 	}
-	//Demande le prochain joueur 
+
+	// Demande le prochain joueur 
 	public void nextPlayer() {
 		manager.nextPlayer();
 	}
@@ -135,9 +137,9 @@ public class FenetreJeu extends JPanel{
 		return nextJoueur;
 	}
 
-    public void setNextJoueur(Joueur j) {
-        this.nextJoueur = j;
-        changeNextUnitStandBy(j);
+    public void setNextJoueur() {
+        this.nextJoueur = manager.getCurrentPlayer();
+        changeNextUnitStandBy(this.nextJoueur);
         changeBackground();
     }
 
@@ -147,8 +149,8 @@ public class FenetreJeu extends JPanel{
 	}
 	
 	public void showPrice() {
-		Income.setText("    Income : " + nextJoueur.getIncome()+ " (" + ter.getNextUnit().getIncome()+")" );
-		Money.setText("   Argent : " + nextJoueur.getMoney() + " (" + ter.getNextUnit().getCout() + ")");
+        int unitIncome = ter.getNextUnit().getIncome();
+        Money.setText("   Argent : " + nextJoueur.getMoney() + " (" + (-ter.getNextUnit().getCout()) + ")");
+        Income.setText("    Income : " + nextJoueur.getIncome()+ " (" + (unitIncome > 0 ? "+" : "") + unitIncome +")" );
 	}
 }
-

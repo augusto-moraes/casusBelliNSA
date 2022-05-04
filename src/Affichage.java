@@ -62,7 +62,9 @@ public class Affichage extends JFrame{
         this.add(principal);
         this.add(choseNbPlayers, BorderLayout.NORTH); 
         this.add(credits, BorderLayout.SOUTH);
-        setVisible(true);
+        
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
     
     // méthode pour rendre d'image cliquable

@@ -3,7 +3,6 @@ import java.util.*;
 public class Joueur{
     
     private static int nbJoueur= 0;
-    private String nom;
     private int id;
     private int color;
     private boolean isAlive;
@@ -12,15 +11,12 @@ public class Joueur{
     private int nbCase; //le nombre de cases que le joueur a sur le plateau
     private LinkedList<Unite> lesUnites = new LinkedList<Unite>(); //le tableau des unités que possède le joueur sur le terrain
 
-    // nom un peu useless, on pourrait peut-etre enlever si on l'utilise pas a la fin
-    public Joueur(String nom, int color) {
+    public Joueur(int color) {
         nbJoueur++;
         this.id=nbJoueur;
-        this.nom=nom;
         this.color=color;
         this.money= 15;
         this.nbCase=1;
-
     }
     public LinkedList<Unite> getListUnites() {
 		return lesUnites;
@@ -29,10 +25,6 @@ public class Joueur{
     public String toString() {
 		return "Joueur " + this.id + " avec " + getMoney() + " pièces et un nb d'unités de " + lesUnites.size() + " et " + this.nbCase + " cases";
 	}
-    
-    public Joueur(int color) {
-        this("Joueur", color);
-    }
 
     public void addCase() { //ajoute une case au nombre de cases que le joueur a
 		this.nbCase++;
@@ -48,10 +40,6 @@ public class Joueur{
     
     public int getColor(){
         return this.color;
-    }
-    
-    public String getNom(){
-        return this.nom;   
     }
 
     public int getMoney(){
@@ -82,8 +70,7 @@ public class Joueur{
     public boolean initTour(){
         // récupérer son économie
         while(lesUnites.size() != 0 && this.money+this.getIncome()<=0) { //tant qu'on a la somme de la monnaie et des incomes qui est négative, on tue la dernière unite du tableau d'unites
-            this.getListUnites().removeLast().getCase().setUnite(null);
-            
+            this.getListUnites().removeLast().getCase().setUnite(null);   
         }
         this.money += this.getIncome();
         

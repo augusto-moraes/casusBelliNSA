@@ -7,9 +7,6 @@ public class EcranVictoire extends JFrame{
     private JLabel label;
     private JLabel vicStr;
 
-    private JButton rejouer;
-    private JButton quit;
-
     private Joueur winner;
   
     public EcranVictoire(Joueur winner, int largeur, int hauteur){
@@ -29,7 +26,7 @@ public class EcranVictoire extends JFrame{
         vicStr.setHorizontalAlignment(SwingConstants.CENTER); 
         vicStr.setVerticalAlignment(SwingConstants.CENTER); 
 
-        label = new JLabel("Le joueur " + this.winner.getId() + " a gagné !!");
+        label = new JLabel("Le joueur " + this.winner.getId() + " a gagne !!");
         label.setForeground(Color.WHITE);
 
         label.setHorizontalAlignment(SwingConstants.CENTER); 
